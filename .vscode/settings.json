@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Come back for you Prototype.sln"
+    "dotnet.defaultSolution": "Come-back-for-you.sln"
 }
