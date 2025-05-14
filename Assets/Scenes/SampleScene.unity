@@ -158,8 +158,8 @@ SpringJoint2D:
   m_ConnectedAnchor: {x: 0.39298248, y: 0.65516734}
   m_AutoConfigureDistance: 0
   m_Distance: 0.1
-  m_DampingRatio: 0
-  m_Frequency: 10
+  m_DampingRatio: 1
+  m_Frequency: 20
 --- !u!50 &508818590
 Rigidbody2D:
   serializedVersion: 5
@@ -297,7 +297,7 @@ Transform:
   m_GameObject: {fileID: 508818588}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.61, y: -3.26, z: 0.01394892}
+  m_LocalPosition: {x: 66.57, y: 5.58, z: 0.01394892}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -615,7 +615,7 @@ TilemapCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c8e897f59ad56f44182178d47a5ad816, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -8624,7 +8624,7 @@ Transform:
   m_GameObject: {fileID: 840279921}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -82.21, y: -4.54, z: 0}
+  m_LocalPosition: {x: 75.06, y: -5.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8701,7 +8701,7 @@ SpringJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 0
   m_Anchor: {x: 0.10135174, y: 0.8145633}
-  m_ConnectedAnchor: {x: -0.29757786, y: -0.77508485}
+  m_ConnectedAnchor: {x: -0.27327824, y: -0.7872342}
   m_AutoConfigureDistance: 0
   m_Distance: 0.1
   m_DampingRatio: 0
@@ -8767,7 +8767,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.10841417, y: 0}
+  m_Offset: {x: 0.10569286, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -8777,7 +8777,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.53317165, y: 2}
+  m_Size: {x: 0.38620186, y: 2}
   m_EdgeRadius: 0
 --- !u!1 &906280201
 GameObject:
@@ -9533,7 +9533,7 @@ Transform:
   m_GameObject: {fileID: 1138895337}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -79.54, y: -4.41, z: 0}
+  m_LocalPosition: {x: 76.35, y: -5.18, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9676,7 +9676,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.113776684, y: 0}
+  m_Offset: {x: -0.10833311, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -9686,7 +9686,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.52244663, y: 2}
+  m_Size: {x: 0.4135809, y: 2}
   m_EdgeRadius: 0
 --- !u!1 &1401349669
 GameObject:
@@ -9717,7 +9717,7 @@ Transform:
   m_GameObject: {fileID: 1401349669}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -29.07, y: -4.51, z: 0.01394892}
+  m_LocalPosition: {x: 64.52, y: 5.47, z: 0.01394892}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9797,8 +9797,8 @@ SpringJoint2D:
   m_ConnectedAnchor: {x: -0.38813782, y: 0.6582475}
   m_AutoConfigureDistance: 0
   m_Distance: 0.1
-  m_DampingRatio: 0
-  m_Frequency: 10
+  m_DampingRatio: 1
+  m_Frequency: 20
 --- !u!61 &1401349675
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10018,7 +10018,7 @@ Transform:
   m_GameObject: {fileID: 1741283931}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 39.53, y: -2.67, z: -0.13469358}
+  m_LocalPosition: {x: 106.84, y: 7.1999993, z: -0.13469358}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10074,7 +10074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snapDistance: 1.5
-  reconnectDelay: 1
+  reconnectDelay: 0.2
   head: {fileID: 1741283936}
   body: {fileID: 1875193006}
   rArm: {fileID: 508818593}
@@ -10134,7 +10134,7 @@ Transform:
   m_GameObject: {fileID: 1875193005}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 39.54, y: -4.01, z: -0.06935681}
+  m_LocalPosition: {x: 106.869995, y: 5.0799994, z: -0.06935681}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10242,8 +10242,8 @@ SpringJoint2D:
   m_ConnectedAnchor: {x: -0.0042209625, y: -0.38796097}
   m_AutoConfigureDistance: 0
   m_Distance: 0.1
-  m_DampingRatio: 0
-  m_Frequency: 10
+  m_DampingRatio: 1
+  m_Frequency: 20
 --- !u!114 &1875193013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10321,6 +10321,7 @@ GameObject:
   - component: {fileID: 1979355376}
   - component: {fileID: 1979355381}
   - component: {fileID: 1979355382}
+  - component: {fileID: 1979355383}
   m_Layer: 0
   m_Name: MovementHandler
   m_TagString: Untagged
@@ -10400,7 +10401,7 @@ Transform:
   m_GameObject: {fileID: 1979355375}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.06, y: -0.48, z: 0.616603}
+  m_LocalPosition: {x: 55.069996, y: 7.4499993, z: 0.616603}
   m_LocalScale: {x: 0.23632, y: 0.23632, z: 0.23632}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10443,7 +10444,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979355375}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbdf79f4bd44b2c48b77db6582d87c2e, type: 3}
   m_Name: 
@@ -10462,6 +10463,36 @@ MonoBehaviour:
   midAirControlForce: 5
   groundCheckSize: {x: 0.56, y: 1.9}
   groundCheckDistance: -0.01
+--- !u!114 &1979355383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979355375}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b13db78fb0c45a498fab9361c7d304a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headRb: {fileID: 1741283933}
+  bodyRb: {fileID: 1875193008}
+  leftArmRb: {fileID: 1401349676}
+  rightArmRb: {fileID: 508818590}
+  leftLegRb: {fileID: 840279925}
+  rightLegRb: {fileID: 1138895341}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  stepFrequency: 0.1
+  stepForce: 50
+  legSwingTorque: 60
+  stabilizationForce: 20
+  balanceTorque: 20
+  armBalanceTorque: 0.1
+  legUprightTorque: 4000
+  groundCheckSize: {x: 0.72, y: 2.14}
+  groundCheckDistance: -0.02
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

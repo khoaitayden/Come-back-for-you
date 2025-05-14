@@ -65,8 +65,10 @@ public class HeadBodyAndOneArm : MonoBehaviour
 
     private void CheckWallTouch()
     {
-        isTouchingWall = Physics2D.Raycast(armRb.position, Vector2.right, wallCheckDistance, wallLayer) ||
-                        Physics2D.Raycast(armRb.position, Vector2.left, wallCheckDistance, wallLayer);
+        isTouchingWall = 
+        Physics2D.Raycast(armRb.position, Vector2.right, wallCheckDistance, wallLayer) 
+        || 
+        Physics2D.Raycast(armRb.position, Vector2.left, wallCheckDistance, wallLayer);
     }
 
     private void CheckJumpInput()
