@@ -12,7 +12,6 @@ public class FullBody : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Movement Settings")]
-    // Overall walking speed
     [SerializeField] private float stepFrequency = 0.5f; 
     [SerializeField] private float stepForce = 10f;      
     [SerializeField] private float legSwingTorque = 5f;  
@@ -20,6 +19,15 @@ public class FullBody : MonoBehaviour
     [SerializeField] private float balanceTorque = 3f;  
     [SerializeField] private float armBalanceTorque = 1.5f; 
     [SerializeField] private float legUprightTorque = 15f; 
+
+    [Header("Jump Settings")]
+    [SerializeField] private float jumpForce = 15f;         // Force to propel the body upward
+    [SerializeField] private float legPushForce = 3f;      // Upward force on legs to push during jump
+    [SerializeField] private float airControlForce = 5f;   // Horizontal force for mid-air control
+
+    [Header("Fall Settings")]
+    [SerializeField] private float normalGravityScale = 1f; // Default gravity scale
+    [SerializeField] private float fallGravityScale = 3f;  // Increased gravity scale for faster fall
 
     [Header("Ground Check Settings")]
     [SerializeField] private Vector2 groundCheckSize = new Vector2(0.73f, 0.14f); 
@@ -29,12 +37,14 @@ public class FullBody : MonoBehaviour
     private float stepTimer;   
     private bool isLeftLegStep;
     private bool isLegGrounded;
+    private bool bothLegsGrounded;
+    private bool wantsToJump;          // Tracks if player wants to jump
 
     void Start()
     {
-
         stepTimer = stepFrequency; 
         isLeftLegStep = true;    
+        SetGravityScale(normalGravityScale); // Initialize with normal gravity
     }
 
     void Update()
@@ -58,8 +68,15 @@ public class FullBody : MonoBehaviour
             groundLayer
         );
         isLegGrounded = leftLegGrounded || rightLegGrounded; 
+        bothLegsGrounded = leftLegGrounded && rightLegGrounded; // Require both legs grounded for jump
 
-        // Update step timer
+        // Detect jump input (e.g., "W" key or up axis)
+        if (moveInput.y > 0.5f && bothLegsGrounded && !wantsToJump)
+        {
+            wantsToJump = true;
+        }
+
+        // Update step timer for walking
         if (Mathf.Abs(moveInput.x) > 0.05f && isLegGrounded)
         {
             stepTimer -= Time.deltaTime;
@@ -76,22 +93,68 @@ public class FullBody : MonoBehaviour
         if (headRb == null || bodyRb == null || leftArmRb == null || rightArmRb == null || leftLegRb == null || rightLegRb == null) return;
 
         MaintainBalance();
+        HandleJump();
+        HandleMidAirControl();
         HandleWalking();
         KeepLegsUpright();
+
+        // Adjust gravity scale based on ground contact
+        if (!isLegGrounded)
+        {
+            SetGravityScale(fallGravityScale);
+        }
+        else if (bothLegsGrounded)
+        {
+            SetGravityScale(normalGravityScale);
+        }
+    }
+
+    private void SetGravityScale(float scale)
+    {
+        bodyRb.gravityScale = scale;
+        leftLegRb.gravityScale = scale;
+        rightLegRb.gravityScale = scale;
     }
 
     private void MaintainBalance()
     {
         float bodyAngle = bodyRb.rotation;
-        float balanceCorrection = -Mathf.Clamp(bodyAngle, -45f, 45f) * balanceTorque; // Limit correction range
+        float balanceCorrection = -Mathf.Clamp(bodyAngle, -45f, 45f) * balanceTorque;
         bodyRb.AddTorque(balanceCorrection, ForceMode2D.Force);
 
         bodyRb.AddForce(Vector2.up * stabilizationForce, ForceMode2D.Force);
 
-        // Use arms for counterbalance
         float armBalance = Mathf.Clamp(bodyAngle, -30f, 30f) * armBalanceTorque;
         leftArmRb.AddTorque(-armBalance, ForceMode2D.Force);
         rightArmRb.AddTorque(armBalance, ForceMode2D.Force);
+    }
+
+    private void HandleJump()
+    {
+        if (wantsToJump && bothLegsGrounded)
+        {
+            // Execute jump: apply upward force to body
+            bodyRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+            // Apply upward force to legs to simulate pushing off
+            leftLegRb.AddForce(Vector2.up * legPushForce, ForceMode2D.Impulse);
+            rightLegRb.AddForce(Vector2.up * legPushForce, ForceMode2D.Impulse);
+
+            // Apply a small upward force to head for natural motion
+            headRb.AddForce(Vector2.up * (jumpForce * 0.5f), ForceMode2D.Impulse);
+
+            wantsToJump = false; // Reset jump state
+        }
+    }
+
+    private void HandleMidAirControl()
+    {
+        // Allow horizontal control mid-air if not grounded
+        if (!isLegGrounded && Mathf.Abs(moveInput.x) > 0.05f)
+        {
+            Vector2 airControl = Vector2.right * moveInput.x * airControlForce;
+            bodyRb.AddForce(airControl, ForceMode2D.Force);
+        }
     }
 
     private void HandleWalking()
@@ -101,7 +164,6 @@ public class FullBody : MonoBehaviour
             Rigidbody2D steppingLeg = isLeftLegStep ? leftLegRb : rightLegRb;
             Rigidbody2D supportingLeg = isLeftLegStep ? rightLegRb : leftLegRb;
 
-            // Check if the stepping leg is grounded
             bool steppingLegGrounded = Physics2D.BoxCast(
                 steppingLeg.position,
                 groundCheckSize,
@@ -129,7 +191,6 @@ public class FullBody : MonoBehaviour
                 supportingLeg.AddForce(Vector2.down * 3f, ForceMode2D.Force); 
             }
 
-            // Adjust body angle
             bodyRb.AddTorque(-moveInput.x * 0.5f, ForceMode2D.Force);
         }
     }
