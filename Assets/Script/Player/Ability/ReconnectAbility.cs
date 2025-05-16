@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Collections;
 
 public class ReconnectAbility : MonoBehaviour
@@ -14,44 +13,28 @@ public class ReconnectAbility : MonoBehaviour
     public float snapDistance;
     public float reconnectDelay;
 
-    [Header("Body Part Transforms")]
-    [SerializeField] private Transform head;
-    [SerializeField] private Transform body;
-    [SerializeField] private Transform rArm;
-    [SerializeField] private Transform lArm;
-    [SerializeField] private Transform rLeg;
-    [SerializeField] private Transform lLeg;
+    [Header("Body Part Transforms (Assign in Inspector)")]
+    [SerializeField] private Transform head, body, rArm, lArm, rLeg, lLeg;
 
-    [Header("Body Part Rigidbodies")]
-    [SerializeField] private Rigidbody2D headRb;
-    [SerializeField] private Rigidbody2D rArmRb;
-    [SerializeField] private Rigidbody2D lArmRb;
-    [SerializeField] private Rigidbody2D rLegRb;
-    [SerializeField] private Rigidbody2D lLegRb;
-    [SerializeField] private Rigidbody2D bodyRb;
+    [Header("Body Part Rigidbodies (Assign in Inspector)")]
+    [SerializeField] private Rigidbody2D headRb, bodyRb, rArmRb, lArmRb, rLegRb, lLegRb;
 
-    [Header("Spring Joints")]
-    [SerializeField] private SpringJoint2D bodyToHeadSpringJoint;
-    [SerializeField] private SpringJoint2D rArmToBodySpringJoint;
-    [SerializeField] private SpringJoint2D lArmToBodySpringJoint;
-    [SerializeField] private SpringJoint2D rLegToBodySpringJoint;
-    [SerializeField] private SpringJoint2D lLegToBodySpringJoint;
+    [Header("Spring Joints (Assign in Inspector)")]
+    [SerializeField] private SpringJoint2D bodyToHeadSpringJoint, rArmToBodySpringJoint, lArmToBodySpringJoint, rLegToBodySpringJoint, lLegToBodySpringJoint;
 
-    private bool canHeadReconnect = true;
-    private bool canRightArmReconnect = true;
-    private bool canLeftArmReconnect = true;
-    private bool canRightLegReconnect = true;
-    private bool canLeftLegReconnect = true;
+    [Header("Movement Control (Assign in Inspector)")]
+    public MovementStage movementStage;
+
+    private bool canHeadReconnect = true, canRightArmReconnect = true, canLeftArmReconnect = true, canRightLegReconnect = true, canLeftLegReconnect = true;
 
     private void Awake()
     {
         InitializeSpringJoints();
+        FindOrAssignMovementStage();
+        UpdateCurrentMovementStage();
     }
 
-    private void FixedUpdate()
-    {
-        TryReconnectParts();
-    }
+    private void FixedUpdate() => TryReconnectParts();
 
     private void InitializeSpringJoints()
     {
@@ -66,121 +49,99 @@ public class ReconnectAbility : MonoBehaviour
         }
     }
 
-    private void TryReconnectParts()
+    private void FindOrAssignMovementStage()
     {
-        if (!connectedHead && canHeadReconnect && Vector2.Distance(head.position, body.position) < snapDistance)
-            ConnectPart(bodyToHeadSpringJoint, headRb, ref connectedHead, "Head");
-
-        if (!connectedRightArm && canRightArmReconnect && Vector2.Distance(rArm.position, body.position) < snapDistance)
-            ConnectPart(rArmToBodySpringJoint, bodyRb, ref connectedRightArm, "Right Arm");
-
-        if (!connectedLeftArm && canLeftArmReconnect && Vector2.Distance(lArm.position, body.position) < snapDistance)
-            ConnectPart(lArmToBodySpringJoint, bodyRb, ref connectedLeftArm, "Left Arm");
-
-        if (!connectedRightLeg && canRightLegReconnect && Vector2.Distance(rLeg.position, body.position) < snapDistance)
-            ConnectPart(rLegToBodySpringJoint, bodyRb, ref connectedRightLeg, "Right Leg");
-
-        if (!connectedLeftLeg && canLeftLegReconnect && Vector2.Distance(lLeg.position, body.position) < snapDistance)
-            ConnectPart(lLegToBodySpringJoint, bodyRb, ref connectedLeftLeg, "Left Leg");
-    }
-
-    private void ConnectPart(SpringJoint2D joint, Rigidbody2D partRb, ref bool connectionFlag, string partName)
-    {
-        if (joint != null && partRb != null)
+        if (movementStage == null)
         {
-            joint.connectedBody = partRb;
-            joint.enabled = true;
-            connectionFlag = true;
-            Debug.Log(partName + " connected");
+            movementStage = GetComponent<MovementStage>() ?? FindObjectOfType<MovementStage>();
         }
     }
 
-    public void DisconnectHead()
+    private void TryReconnectParts()
     {
-        DisconnectPart(bodyToHeadSpringJoint, "Head");
-        connectedHead = false;
+        TryReconnectPart(ref connectedHead, canHeadReconnect, head, body, headRb, bodyToHeadSpringJoint, "Head");
+        TryReconnectPart(ref connectedRightArm, canRightArmReconnect, rArm, body, bodyRb, rArmToBodySpringJoint, "Right Arm");
+        TryReconnectPart(ref connectedLeftArm, canLeftArmReconnect, lArm, body, bodyRb, lArmToBodySpringJoint, "Left Arm");
+        TryReconnectPart(ref connectedRightLeg, canRightLegReconnect, rLeg, body, bodyRb, rLegToBodySpringJoint, "Right Leg");
+        TryReconnectPart(ref connectedLeftLeg, canLeftLegReconnect, lLeg, body, bodyRb, lLegToBodySpringJoint, "Left Leg");
     }
 
-    public void DisconnectRightArm()
+    private void TryReconnectPart(ref bool connectedFlag, bool canReconnect, Transform part, Transform body, Rigidbody2D rb, SpringJoint2D joint, string partName)
     {
-        DisconnectPart(rArmToBodySpringJoint, "Right Arm");
-        connectedRightArm = false;
+        if (!connectedFlag && canReconnect && AllRefsValid(part, body, rb, joint) && Vector2.Distance(part.position, body.position) < snapDistance)
+        {
+            ConnectPart(joint, rb, ref connectedFlag);
+        }
     }
 
-    public void DisconnectLeftArm()
+    private bool AllRefsValid(Transform part1, Transform part2, Rigidbody2D rb, SpringJoint2D joint)
+        => part1 != null && part2 != null && rb != null && joint != null;
+
+    private void ConnectPart(SpringJoint2D jointToEnable, Rigidbody2D targetConnectedBody, ref bool connectionFlag)
     {
-        DisconnectPart(lArmToBodySpringJoint, "Left Arm");
-        connectedLeftArm = false;
+        if (jointToEnable != null && targetConnectedBody != null)
+        {
+            jointToEnable.connectedBody = targetConnectedBody;
+            jointToEnable.enabled = true;
+            connectionFlag = true;
+            UpdateCurrentMovementStage();
+        }
     }
 
-    public void DisconnectRightLeg()
-    {
-        DisconnectPart(rLegToBodySpringJoint, "Right Leg");
-        connectedRightLeg = false;
-    }
+    // --- Disconnection Methods ---
+    public void DisconnectHead()      => DisconnectPart(bodyToHeadSpringJoint, ref connectedHead, "Head");
+    public void DisconnectRightArm()  => DisconnectPart(rArmToBodySpringJoint, ref connectedRightArm, "Right Arm");
+    public void DisconnectLeftArm()   => DisconnectPart(lArmToBodySpringJoint, ref connectedLeftArm, "Left Arm");
+    public void DisconnectRightLeg()  => DisconnectPart(rLegToBodySpringJoint, ref connectedRightLeg, "Right Leg");
+    public void DisconnectLeftLeg()   => DisconnectPart(lLegToBodySpringJoint, ref connectedLeftLeg, "Left Leg");
 
-    public void DisconnectLeftLeg()
-    {
-        DisconnectPart(lLegToBodySpringJoint, "Left Leg");
-        connectedLeftLeg = false;
-    }
-
-    private void DisconnectPart(SpringJoint2D joint, string partName)
+    private void DisconnectPart(SpringJoint2D joint, ref bool connectedFlag, string partName)
     {
         if (joint != null)
         {
-            joint.connectedBody = null;
             joint.enabled = false;
+            joint.connectedBody = null;
+            connectedFlag = false;
+            StartCoroutine(ReconnectCooldown(partName));
+            UpdateCurrentMovementStage();
         }
-
-        StartReconnectCooldown(partName);
-    }
-
-    private void StartReconnectCooldown(string partName)
-    {
-        StartCoroutine(ReconnectCooldown(partName));
     }
 
     private IEnumerator ReconnectCooldown(string partName)
     {
-        switch (partName)
-        {
-            case "Head":
-                canHeadReconnect = false;
-                break;
-            case "Right Arm":
-                canRightArmReconnect = false;
-                break;
-            case "Left Arm":
-                canLeftArmReconnect = false;
-                break;
-            case "Right Leg":
-                canRightLegReconnect = false;
-                break;
-            case "Left Leg":
-                canLeftLegReconnect = false;
-                break;
-        }
-
+        SetReconnectFlag(partName, false);
         yield return new WaitForSeconds(reconnectDelay);
+        SetReconnectFlag(partName, true);
+    }
 
+    private void SetReconnectFlag(string partName, bool value)
+    {
         switch (partName)
         {
-            case "Head":
-                canHeadReconnect = true;
-                break;
-            case "Right Arm":
-                canRightArmReconnect = true;
-                break;
-            case "Left Arm":
-                canLeftArmReconnect = true;
-                break;
-            case "Right Leg":
-                canRightLegReconnect = true;
-                break;
-            case "Left Leg":
-                canLeftLegReconnect = true;
-                break;
+            case "Head":      canHeadReconnect = value; break;
+            case "Right Arm": canRightArmReconnect = value; break;
+            case "Left Arm":  canLeftArmReconnect = value; break;
+            case "Right Leg": canRightLegReconnect = value; break;
+            case "Left Leg":  canLeftLegReconnect = value; break;
         }
+    }
+
+    private void UpdateCurrentMovementStage()
+    {
+        if (movementStage == null) return;
+
+        BodyPartStage newStage;
+        if (connectedHead && connectedRightArm && connectedLeftArm && connectedRightLeg && connectedLeftLeg)
+            newStage = BodyPartStage.FullyConnected;
+        else if (connectedHead && connectedRightArm && connectedLeftArm)
+            newStage = BodyPartStage.TwoArmsConnected;
+        else if (connectedHead && connectedRightArm)
+            newStage = BodyPartStage.RightArmConnected;
+        else if (connectedHead)
+            newStage = BodyPartStage.BodyConnected;
+        else
+            newStage = BodyPartStage.HeadOnly;
+
+        movementStage.CurrentStage = newStage;
     }
 }

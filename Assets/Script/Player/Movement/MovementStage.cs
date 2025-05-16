@@ -1,13 +1,79 @@
+using UnityEngine;
+
 public enum BodyPartStage
 {
     HeadOnly,
     BodyConnected,
-    OneArmConnected,
+    RightArmConnected,
     TwoArmsConnected,
-    OneLegConnected,
     FullyConnected
 }
-public class MovementStage
+
+public class MovementStage : MonoBehaviour
 {
-    public BodyPartStage currentStage = BodyPartStage.HeadOnly;
+    [Header("Movement Scripts (Assign in Inspector)")]
+    public MonoBehaviour headMovementScript;
+    public MonoBehaviour headBodyMovementScript;
+    public MonoBehaviour headBodyAndOneArmScript;
+    public MonoBehaviour headBodyAndTwoArmsScript;
+    public MonoBehaviour fullBodyScript;
+
+    private BodyPartStage _currentStage = BodyPartStage.HeadOnly;
+    private bool _scriptsInitialized = false;
+
+    public BodyPartStage CurrentStage
+    {
+        get { return _currentStage; }
+        set
+        {
+            if (_currentStage != value || !_scriptsInitialized)
+            {
+                _currentStage = value;
+                SetActiveMovementScript();
+            }
+        }
+    }
+
+    void Awake()
+    {
+        SetActiveMovementScript();
+        _scriptsInitialized = true;
+    }
+
+    private void SetActiveMovementScript()
+    {
+        DisableAllMovementScripts();
+        EnableCurrentStageScript();
+    }
+
+    private void DisableAllMovementScripts()
+    {
+        if (headMovementScript != null) headMovementScript.enabled = false;
+        if (headBodyMovementScript != null) headBodyMovementScript.enabled = false;
+        if (headBodyAndOneArmScript != null) headBodyAndOneArmScript.enabled = false;
+        if (headBodyAndTwoArmsScript != null) headBodyAndTwoArmsScript.enabled = false;
+        if (fullBodyScript != null) fullBodyScript.enabled = false;
+    }
+
+    private void EnableCurrentStageScript()
+    {
+        switch (_currentStage)
+        {
+            case BodyPartStage.HeadOnly:
+                if (headMovementScript != null) headMovementScript.enabled = true;
+                break;
+            case BodyPartStage.BodyConnected:
+                if (headBodyMovementScript != null) headBodyMovementScript.enabled = true;
+                break;
+            case BodyPartStage.RightArmConnected:
+                if (headBodyAndOneArmScript != null) headBodyAndOneArmScript.enabled = true;
+                break;
+            case BodyPartStage.TwoArmsConnected:
+                if (headBodyAndTwoArmsScript != null) headBodyAndTwoArmsScript.enabled = true;
+                break;
+            case BodyPartStage.FullyConnected:
+                if (fullBodyScript != null) fullBodyScript.enabled = true;
+                break;
+        }
+    }
 }
