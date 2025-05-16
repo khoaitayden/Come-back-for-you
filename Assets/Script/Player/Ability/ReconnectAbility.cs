@@ -118,7 +118,7 @@ public class ReconnectAbility : MonoBehaviour
     {
         switch (partName)
         {
-            case "Head":      canHeadReconnect = value; break;
+            case "Head":canHeadReconnect = value; break;
             case "Right Arm": canRightArmReconnect = value; break;
             case "Left Arm":  canLeftArmReconnect = value; break;
             case "Right Leg": canRightLegReconnect = value; break;

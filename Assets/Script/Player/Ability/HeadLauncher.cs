@@ -30,6 +30,7 @@ public class HeadLauncher : MonoBehaviour
         }
     private void LaunchHeadInDirection()
     {
+        Debug.Log("HeadLaunched");
         if (!ReconnectAbility.connectedHead) return;
         connectAbility.DisconnectHead();
         Vector2 launchDirection = -(launchPoint.position - Head.position).normalized;

@@ -9,8 +9,6 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 MoveInput { get; private set; }
     public bool LaunchPressed { get; private set; }
     public event Action OnLaunchPressed;
-    public event Action<Vector2> OnMoveInput;
-    public event Action OnJumpInput;
     private void Awake()
     {
         if (Instance == null) Instance = this;
