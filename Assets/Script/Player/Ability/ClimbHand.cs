@@ -47,18 +47,12 @@ public class ClimbWallAbility : MonoBehaviour
 
     private void OnEnable()
     {
-        if (preJump != null)
-        {
             preJump.Enable();
-        }
     }
 
     private void OnDisable()
     {
-        if (preJump != null)
-        {
             preJump.Disable();
-        }
     }
 
     void Start()
@@ -91,7 +85,6 @@ public class ClimbWallAbility : MonoBehaviour
             stickCooldownTimer = stickCooldownAfterJump;
         }
 
-        // Update timers
         if (isSticking)
         {
             stickTimer -= Time.deltaTime;
@@ -119,7 +112,7 @@ public class ClimbWallAbility : MonoBehaviour
         if (isSticking)
         {
             StickToWall();
-            MoveAlongWall(PlayerInputHandler.Instance.MoveInput.y); // W/S for up/down
+            MoveAlongWall(PlayerInputHandler.Instance.MoveInput.y); 
         }
     }
 

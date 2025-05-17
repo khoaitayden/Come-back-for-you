@@ -8,7 +8,6 @@ public class PlayerInputHandler : MonoBehaviour
     private PlayerControls controls;
     public Vector2 MoveInput { get; private set; }
     public bool LaunchPressed { get; private set; }
-    public event Action OnLaunchPressed;
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -17,8 +16,6 @@ public class PlayerInputHandler : MonoBehaviour
 
         controls.Player.Move.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
         controls.Player.Move.canceled += _ => MoveInput = Vector2.zero;
-
-        controls.Player.LaunchHead.performed += _ => OnLaunchPressed?.Invoke();
     }
 
     private void OnEnable() => controls.Enable();

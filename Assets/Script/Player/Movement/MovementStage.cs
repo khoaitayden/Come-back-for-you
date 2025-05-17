@@ -11,12 +11,13 @@ public enum BodyPartStage
 
 public class MovementStage : MonoBehaviour
 {
-    [Header("Movement Scripts (Assign in Inspector)")]
+    [Header("Movement Scripts")]
     public MonoBehaviour headMovementScript;
     public MonoBehaviour headBodyMovementScript;
     public MonoBehaviour headBodyAndOneArmScript;
     public MonoBehaviour headBodyAndTwoArmsScript;
     public MonoBehaviour fullBodyScript;
+    [SerializeField ] private Camera camera;
 
     private BodyPartStage _currentStage = BodyPartStage.HeadOnly;
     private bool _scriptsInitialized = false;
@@ -61,18 +62,23 @@ public class MovementStage : MonoBehaviour
         {
             case BodyPartStage.HeadOnly:
                 if (headMovementScript != null) headMovementScript.enabled = true;
+                camera.orthographicSize = 3f;
                 break;
             case BodyPartStage.BodyConnected:
                 if (headBodyMovementScript != null) headBodyMovementScript.enabled = true;
+                camera.orthographicSize = 5f;
                 break;
             case BodyPartStage.RightArmConnected:
                 if (headBodyAndOneArmScript != null) headBodyAndOneArmScript.enabled = true;
+                camera.orthographicSize = 6f;
                 break;
             case BodyPartStage.TwoArmsConnected:
                 if (headBodyAndTwoArmsScript != null) headBodyAndTwoArmsScript.enabled = true;
+                camera.orthographicSize = 6f;
                 break;
             case BodyPartStage.FullyConnected:
                 if (fullBodyScript != null) fullBodyScript.enabled = true;
+                camera.orthographicSize = 8f;
                 break;
         }
     }

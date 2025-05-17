@@ -13,16 +13,16 @@ public class ReconnectAbility : MonoBehaviour
     public float snapDistance;
     public float reconnectDelay;
 
-    [Header("Body Part Transforms (Assign in Inspector)")]
+    [Header("Body Part Transforms")]
     [SerializeField] private Transform head, body, rArm, lArm, rLeg, lLeg;
 
-    [Header("Body Part Rigidbodies (Assign in Inspector)")]
+    [Header("Body Part Rigidbodies")]
     [SerializeField] private Rigidbody2D headRb, bodyRb, rArmRb, lArmRb, rLegRb, lLegRb;
 
-    [Header("Spring Joints (Assign in Inspector)")]
+    [Header("Spring Joints")]
     [SerializeField] private SpringJoint2D bodyToHeadSpringJoint, rArmToBodySpringJoint, lArmToBodySpringJoint, rLegToBodySpringJoint, lLegToBodySpringJoint;
 
-    [Header("Movement Control (Assign in Inspector)")]
+    [Header("Movement Control")]
     public MovementStage movementStage;
 
     private bool canHeadReconnect = true, canRightArmReconnect = true, canLeftArmReconnect = true, canRightLegReconnect = true, canLeftLegReconnect = true;

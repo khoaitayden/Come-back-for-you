@@ -548,6 +548,7 @@ MonoBehaviour:
   headBodyAndOneArmScript: {fileID: 98031571614535282}
   headBodyAndTwoArmsScript: {fileID: 2775469310515052477}
   fullBodyScript: {fileID: 7005864909978693455}
+  camera: {fileID: 0}
 --- !u!1 &4697219980250832753
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,7 +747,7 @@ GameObject:
   - component: {fileID: 2619280055766034368}
   - component: {fileID: 1272834234372335827}
   - component: {fileID: 7305752376592042335}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -889,6 +890,23 @@ MonoBehaviour:
   launchPoint: {fileID: 5088252613476746678}
   connectAbility: {fileID: 112313710491306320}
   launchForce: 10
+  Launch:
+    m_Name: Launch
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: c69676a7-aa0f-49cf-86fa-6036c0d2a5ee
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 0dfe9f11-cfb0-463b-8a4c-50f34ab222a0
+      m_Path: <Keyboard>/q
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Launch
+      m_Flags: 0
+    m_Flags: 0
 --- !u!61 &7305752376592042335
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -13,22 +13,29 @@ public class HeadLauncher : MonoBehaviour
 
     [Header("Launch Settings")]
     [SerializeField] private float launchForce;
+    [Header("Input")]
+    [SerializeField] private InputAction Launch;
     private void Awake()
     {
 
     }
     private void OnEnable()
-        {
-            if (PlayerInputHandler.Instance != null)
-            PlayerInputHandler.Instance.OnLaunchPressed += LaunchHeadInDirection;
-        }
+    {
+        Launch.Enable();
+        Launch.performed += LaunchHeadInDirection;
+            //if (PlayerInputHandler.Instance != null)
+            //PlayerInputHandler.Instance.OnLaunchPressed += LaunchHeadInDirection;
+    }
 
     private void OnDisable()
-        {
-            if (PlayerInputHandler.Instance != null)
-            PlayerInputHandler.Instance.OnLaunchPressed -= LaunchHeadInDirection;
-        }
-    private void LaunchHeadInDirection()
+    {
+
+        Launch.performed -= LaunchHeadInDirection;
+        Launch.Disable();
+            
+            
+    }
+    private void LaunchHeadInDirection(InputAction.CallbackContext ctx)
     {
         Debug.Log("HeadLaunched");
         if (!ReconnectAbility.connectedHead) return;
