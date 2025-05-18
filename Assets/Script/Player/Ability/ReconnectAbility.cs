@@ -29,6 +29,13 @@ public class ReconnectAbility : MonoBehaviour
 
     private void Awake()
     {
+        // Reset static connection flags on scene load
+        connectedHead = false;
+        connectedRightArm = false;
+        connectedLeftArm = false;
+        connectedRightLeg = false;
+        connectedLeftLeg = false;
+
         InitializeSpringJoints();
         FindOrAssignMovementStage();
         UpdateCurrentMovementStage();
@@ -38,10 +45,10 @@ public class ReconnectAbility : MonoBehaviour
 
     private void InitializeSpringJoints()
     {
-        SpringJoint2D[] joints = { bodyToHeadSpringJoint, rArmToBodySpringJoint, lArmToBodySpringJoint, rLegToBodySpringJoint, lLegToBodySpringJoint };
+        var joints = new[] { bodyToHeadSpringJoint, rArmToBodySpringJoint, lArmToBodySpringJoint, rLegToBodySpringJoint, lLegToBodySpringJoint };
         foreach (var joint in joints)
         {
-            if (joint != null)
+            if (joint)
             {
                 joint.enabled = false;
                 joint.connectedBody = null;
@@ -51,10 +58,7 @@ public class ReconnectAbility : MonoBehaviour
 
     private void FindOrAssignMovementStage()
     {
-        if (movementStage == null)
-        {
-            movementStage = GetComponent<MovementStage>() ?? FindObjectOfType<MovementStage>();
-        }
+        movementStage ??= GetComponent<MovementStage>() ?? FindObjectOfType<MovementStage>();
     }
 
     private void TryReconnectParts()
@@ -68,18 +72,15 @@ public class ReconnectAbility : MonoBehaviour
 
     private void TryReconnectPart(ref bool connectedFlag, bool canReconnect, Transform part, Transform body, Rigidbody2D rb, SpringJoint2D joint, string partName)
     {
-        if (!connectedFlag && canReconnect && AllRefsValid(part, body, rb, joint) && Vector2.Distance(part.position, body.position) < snapDistance)
+        if (!connectedFlag && canReconnect && part && body && rb && joint && Vector2.Distance(part.position, body.position) < snapDistance)
         {
             ConnectPart(joint, rb, ref connectedFlag);
         }
     }
 
-    private bool AllRefsValid(Transform part1, Transform part2, Rigidbody2D rb, SpringJoint2D joint)
-        => part1 != null && part2 != null && rb != null && joint != null;
-
     private void ConnectPart(SpringJoint2D jointToEnable, Rigidbody2D targetConnectedBody, ref bool connectionFlag)
     {
-        if (jointToEnable != null && targetConnectedBody != null)
+        if (jointToEnable && targetConnectedBody)
         {
             jointToEnable.connectedBody = targetConnectedBody;
             jointToEnable.enabled = true;
@@ -89,15 +90,15 @@ public class ReconnectAbility : MonoBehaviour
     }
 
     // --- Disconnection Methods ---
-    public void DisconnectHead()      => DisconnectPart(bodyToHeadSpringJoint, ref connectedHead, "Head");
-    public void DisconnectRightArm()  => DisconnectPart(rArmToBodySpringJoint, ref connectedRightArm, "Right Arm");
-    public void DisconnectLeftArm()   => DisconnectPart(lArmToBodySpringJoint, ref connectedLeftArm, "Left Arm");
-    public void DisconnectRightLeg()  => DisconnectPart(rLegToBodySpringJoint, ref connectedRightLeg, "Right Leg");
-    public void DisconnectLeftLeg()   => DisconnectPart(lLegToBodySpringJoint, ref connectedLeftLeg, "Left Leg");
+    public void DisconnectHead() => DisconnectPart(bodyToHeadSpringJoint, ref connectedHead, "Head");
+    public void DisconnectRightArm() => DisconnectPart(rArmToBodySpringJoint, ref connectedRightArm, "Right Arm");
+    public void DisconnectLeftArm() => DisconnectPart(lArmToBodySpringJoint, ref connectedLeftArm, "Left Arm");
+    public void DisconnectRightLeg() => DisconnectPart(rLegToBodySpringJoint, ref connectedRightLeg, "Right Leg");
+    public void DisconnectLeftLeg() => DisconnectPart(lLegToBodySpringJoint, ref connectedLeftLeg, "Left Leg");
 
     private void DisconnectPart(SpringJoint2D joint, ref bool connectedFlag, string partName)
     {
-        if (joint != null)
+        if (joint)
         {
             joint.enabled = false;
             joint.connectedBody = null;
@@ -118,17 +119,17 @@ public class ReconnectAbility : MonoBehaviour
     {
         switch (partName)
         {
-            case "Head":canHeadReconnect = value; break;
+            case "Head": canHeadReconnect = value; break;
             case "Right Arm": canRightArmReconnect = value; break;
-            case "Left Arm":  canLeftArmReconnect = value; break;
+            case "Left Arm": canLeftArmReconnect = value; break;
             case "Right Leg": canRightLegReconnect = value; break;
-            case "Left Leg":  canLeftLegReconnect = value; break;
+            case "Left Leg": canLeftLegReconnect = value; break;
         }
     }
 
     private void UpdateCurrentMovementStage()
     {
-        if (movementStage == null) return;
+        if (!movementStage) return;
 
         BodyPartStage newStage;
         if (connectedHead && connectedRightArm && connectedLeftArm && connectedRightLeg && connectedLeftLeg)
@@ -143,5 +144,24 @@ public class ReconnectAbility : MonoBehaviour
             newStage = BodyPartStage.HeadOnly;
 
         movementStage.CurrentStage = newStage;
+    }
+
+    // Public method to manually reset connection state
+    public void Reset()
+    {
+        connectedHead = false;
+        connectedRightArm = false;
+        connectedLeftArm = false;
+        connectedRightLeg = false;
+        connectedLeftLeg = false;
+
+        canHeadReconnect = true;
+        canRightArmReconnect = true;
+        canLeftArmReconnect = true;
+        canRightLegReconnect = true;
+        canLeftLegReconnect = true;
+
+        InitializeSpringJoints();
+        UpdateCurrentMovementStage();
     }
 }

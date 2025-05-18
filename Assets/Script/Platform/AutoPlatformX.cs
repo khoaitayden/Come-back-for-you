@@ -3,58 +3,57 @@ using UnityEngine;
 public class AutoMovingPlatformX : MonoBehaviour
 {
     [Header("Platform Settings")]
-    [SerializeField] private float rightPositionX; // X position when platform moves right
-    [SerializeField] private float leftPositionX; // X position when platform moves left
-    [SerializeField] private float moveSpeed = 5f; // Speed of direct movement
-    [SerializeField] private bool moveRightWhenStepped = true; // Toggle to choose right or left when player steps on
-    [SerializeField] private float moveDelay = 1f; // Delay before platform moves after player steps on
+    [SerializeField] private float moveDistance = 5f; // Distance to move right from initial position
+    [SerializeField] private float moveSpeed = 5f; // Speed of movement
+    [SerializeField] private bool moveRightWhenStepped = true; // Move right or left when stepped on
+    [SerializeField] private float moveDelay = 1f; // Delay before moving
 
     private Rigidbody2D platformRigidbody;
     private Vector2 targetPosition;
     private bool playerOnPlatform = false;
     private float delayTimer = 0f;
     private bool isDelayed = false;
+    private float leftPositionX;
+    private float rightPositionX;
 
     void Awake()
     {
         // Initialize platform components
         platformRigidbody = GetComponent<Rigidbody2D>();
-        if (platformRigidbody == null)
+        if (!platformRigidbody)
         {
             Debug.LogError("Rigidbody2D not found on platform GameObject!");
         }
-
-        // Set initial position to left
-        targetPosition = new Vector2(leftPositionX, transform.position.y);
     }
 
     void Start()
     {
-        // Ensure platform starts at left position
-        transform.position = new Vector2(leftPositionX, transform.position.y);
+        // Set left position to initial X, right position as offset
+        leftPositionX = transform.position.x;
+        rightPositionX = leftPositionX + moveDistance;
+        targetPosition = new Vector2(leftPositionX, transform.position.y);
+        transform.position = targetPosition; // Ensure exact start position
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Start delay when player collides with platform
         if (collision.collider.CompareTag("Player") && !playerOnPlatform)
         {
             playerOnPlatform = true;
             isDelayed = true;
             delayTimer = 0f;
-            Debug.Log("Player collided with platform, starting delay before moving!");
+            Debug.Log("Player stepped on platform, starting delay!");
         }
     }
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        // Move platform to opposite position immediately when player steps off
         if (collision.collider.CompareTag("Player"))
         {
             playerOnPlatform = false;
             isDelayed = false;
             targetPosition = new Vector2(moveRightWhenStepped ? leftPositionX : rightPositionX, transform.position.y);
-            Debug.Log("Player stepped off platform, returning to " + (moveRightWhenStepped ? "left" : "right") + " position!");
+            Debug.Log($"Player stepped off, moving to {(moveRightWhenStepped ? "left" : "right")} position!");
         }
     }
 
@@ -69,7 +68,7 @@ public class AutoMovingPlatformX : MonoBehaviour
                 if (playerOnPlatform)
                 {
                     targetPosition = new Vector2(moveRightWhenStepped ? rightPositionX : leftPositionX, transform.position.y);
-                    Debug.Log("Delay finished, moving platform " + (moveRightWhenStepped ? "right" : "left") + "!");
+                    Debug.Log($"Delay finished, moving {(moveRightWhenStepped ? "right" : "left")}!");
                 }
             }
         }
@@ -77,9 +76,32 @@ public class AutoMovingPlatformX : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (platformRigidbody == null) return;
+        if (platformRigidbody)
+        {
+            platformRigidbody.MovePosition(Vector2.MoveTowards(platformRigidbody.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
+        }
+    }
 
-        // Direct position-based movement
-        platformRigidbody.MovePosition(Vector2.MoveTowards(platformRigidbody.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
+    // Visualize the travel distance in the Scene view
+    void OnDrawGizmos()
+    {
+        // Use current position for X and Y, calculate positions based on moveDistance
+        float gizmoLeftX = transform.position.x;
+        float gizmoRightX = gizmoLeftX + moveDistance;
+        Vector3 leftPos = new Vector3(gizmoLeftX, transform.position.y, transform.position.z);
+        Vector3 rightPos = new Vector3(gizmoRightX, transform.position.y, transform.position.z);
+
+        // Draw a green line between left and right positions
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(leftPos, rightPos);
+
+        // Draw blue sphere at left position
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(leftPos, 0.2f);
+
+        // Draw red sphere at right position
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(rightPos, 0.2f);
+
     }
 }

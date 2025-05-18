@@ -83,4 +83,25 @@ public class AutoMovingPlatformY : MonoBehaviour
         // Direct position-based movement
         platformRigidbody.MovePosition(Vector2.MoveTowards(platformRigidbody.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
     }
+
+    // Visualize the travel distance in the Scene view
+    void OnDrawGizmos()
+    {
+        // Define positions for low and high points
+        Vector3 lowPos = new Vector3(transform.position.x, lowPositionY, transform.position.z);
+        Vector3 highPos = new Vector3(transform.position.x, highPositionY, transform.position.z);
+
+        // Draw a green line between low and high positions
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(lowPos, highPos);
+
+        // Draw blue sphere at low position
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(lowPos, 0.2f);
+
+        // Draw red sphere at high position
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(highPos, 0.2f);
+
+    }
 }

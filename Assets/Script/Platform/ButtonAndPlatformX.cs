@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ButtonPlatformY : MonoBehaviour
+public class ButtonPlatformX : MonoBehaviour
 {
     [Header("Button Settings")]
     [SerializeField] private Sprite offSprite; // Sprite when button is off
@@ -9,7 +9,7 @@ public class ButtonPlatformY : MonoBehaviour
 
     [Header("Platform Settings")]
     [SerializeField] private GameObject platform; // Reference to the platform GameObject
-    [SerializeField] private float moveDistance = 5f; // Distance to move up from initial position
+    [SerializeField] private float moveDistance = 5f; // Distance to move right from initial position
     [SerializeField] private float moveSpeed = 5f; // Speed of movement
     [SerializeField] private float moveDelay = 1f; // Delay before platform moves after button toggle
     [SerializeField] private bool shouldAutoOff = true; // Toggle to enable/disable auto-off
@@ -22,8 +22,8 @@ public class ButtonPlatformY : MonoBehaviour
     private float delayTimer = 0f;
     private bool isDelayed = false;
     private bool targetIsOn = false; // Tracks the target state after delay
-    private float lowPositionY;
-    private float highPositionY;
+    private float leftPositionX;
+    private float rightPositionX;
     private float autoOffTimer = 0f;
     private bool playerOnPlatform = false;
 
@@ -59,10 +59,10 @@ public class ButtonPlatformY : MonoBehaviour
     {
         if (!platform) return;
 
-        // Set low position to initial Y, high position as offset
-        lowPositionY = platform.transform.position.y;
-        highPositionY = lowPositionY + moveDistance;
-        targetPosition = new Vector2(platform.transform.position.x, isOn ? highPositionY : lowPositionY);
+        // Set left position to initial X, right position as offset
+        leftPositionX = platform.transform.position.x;
+        rightPositionX = leftPositionX + moveDistance;
+        targetPosition = new Vector2(isOn ? rightPositionX : leftPositionX, platform.transform.position.y);
         platform.transform.position = targetPosition; // Ensure exact start position
     }
 
@@ -114,8 +114,8 @@ public class ButtonPlatformY : MonoBehaviour
             if (delayTimer >= moveDelay)
             {
                 isDelayed = false;
-                targetPosition = new Vector2(platform.transform.position.x, targetIsOn ? highPositionY : lowPositionY);
-                Debug.Log($"Delay finished, moving platform to {(targetIsOn ? "high" : "low")} position!");
+                targetPosition = new Vector2(targetIsOn ? rightPositionX : leftPositionX, platform.transform.position.y);
+                Debug.Log($"Delay finished, moving platform to {(targetIsOn ? "right" : "left")} position!");
             }
         }
 
@@ -130,7 +130,7 @@ public class ButtonPlatformY : MonoBehaviour
                 {
                     spriteRenderer.sprite = offSprite;
                 }
-                targetPosition = new Vector2(platform.transform.position.x, lowPositionY);
+                targetPosition = new Vector2(leftPositionX, platform.transform.position.y);
                 Debug.Log("Platform auto-returned to off state!");
                 autoOffTimer = 0f;
             }
@@ -150,23 +150,23 @@ public class ButtonPlatformY : MonoBehaviour
     {
         if (!platform) return;
 
-        // Define positions for low and high points using platform's X coordinate
-        float gizmoLowY = platform.transform.position.y;
-        float gizmoHighY = gizmoLowY + moveDistance;
-        Vector3 lowPos = new Vector3(platform.transform.position.x, gizmoLowY, platform.transform.position.z);
-        Vector3 highPos = new Vector3(platform.transform.position.x, gizmoHighY, platform.transform.position.z);
+        // Use platform's initial position for left, calculate right position
+        float gizmoLeftX = platform.transform.position.x;
+        float gizmoRightX = gizmoLeftX + moveDistance;
+        Vector3 leftPos = new Vector3(gizmoLeftX, platform.transform.position.y, platform.transform.position.z);
+        Vector3 rightPos = new Vector3(gizmoRightX, platform.transform.position.y, platform.transform.position.z);
 
-        // Draw a green line between low and high positions
+        // Draw a green line between left and right positions
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(lowPos, highPos);
+        Gizmos.DrawLine(leftPos, rightPos);
 
-        // Draw blue sphere at low position
+        // Draw blue sphere at left position
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(lowPos, 0.2f);
+        Gizmos.DrawWireSphere(leftPos, 0.2f);
 
-        // Draw red sphere at high position
+        // Draw red sphere at right position
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(highPos, 0.2f);
+        Gizmos.DrawWireSphere(rightPos, 0.2f);
 
     }
 }
