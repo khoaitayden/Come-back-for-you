@@ -19,16 +19,12 @@ public class ClimbWallAbility : MonoBehaviour
     [Header("Jump Settings")]
     [SerializeField] private float jumpCooldownDuration = 1f;
     [SerializeField] private float jumpThreshold = 0.5f; 
-    [SerializeField] private float stickCooldownAfterJump = 0.3f;
+    [SerializeField] private float postJumpStickCooldownDuration = 0.3f; // Brief delay to prevent sticking after jump
 
     [Header("Stage-Specific Settings")]
-    [SerializeField] private float baseMoveSpeed = 5f;
     [SerializeField] private float baseJumpForce = 15f;
-    [SerializeField] private float oneArmMoveSpeed = 5f;
     [SerializeField] private float oneArmJumpForce = 15f;
-    [SerializeField] private float twoArmsMoveSpeed = 6f;
     [SerializeField] private float twoArmsJumpForce = 18f;
-    [SerializeField] private float fullBodyMoveSpeed = 7f;
     [SerializeField] private float fullBodyJumpForce = 20f;
 
     [Header("Input")]
@@ -37,22 +33,22 @@ public class ClimbWallAbility : MonoBehaviour
     private bool isSticking = false;
     private float stickTimer = 0f;
     private float jumpCooldownTimer = 0f;
-    private float stickCooldownTimer = 0f;
+    private float postJumpStickCooldownTimer = 0f;
     private Vector2 wallNormal;
     private bool oneHandStuck = false;
-    private float currentMoveSpeed;
     private float currentJumpForce;
-    private bool shouldJump = false;
-    private float jumpDirection;
+    private bool shouldJumpHorizontal = false;
+    private bool shouldJumpVertical = false;
+    private Vector2 jumpDirection;
 
     private void OnEnable()
     {
-            preJump.Enable();
+        preJump.Enable();
     }
 
     private void OnDisable()
     {
-            preJump.Disable();
+        preJump.Disable();
     }
 
     void Start()
@@ -64,25 +60,30 @@ public class ClimbWallAbility : MonoBehaviour
     {
         Vector2 moveInput = PlayerInputHandler.Instance != null ? PlayerInputHandler.Instance.MoveInput : Vector2.zero;
 
-        if (stickCooldownTimer > 0f)
-        {
-            stickCooldownTimer -= Time.deltaTime;
-        }
-
         UpdateMovementParameters();
 
-        if (!isSticking && CanStickToWall() && stickCooldownTimer <= 0f)
+        if (!isSticking && CanStickToWall() && postJumpStickCooldownTimer <= 0f)
         {
             isSticking = true;
             stickTimer = oneHandStuck ? maxStickTime / 2f : maxStickTime;
         }
 
-        if (isSticking && jumpCooldownTimer <= 0f && Mathf.Abs(moveInput.x) > jumpThreshold && preJump != null && preJump.IsPressed())
+        // Check for horizontal jump (left/right)
+        if (isSticking && jumpCooldownTimer <= 0f && preJump != null && preJump.IsPressed() && Mathf.Abs(moveInput.x) > jumpThreshold)
         {
-            shouldJump = true;
-            jumpDirection = moveInput.x > 0 ? 1f : -1f; 
+            shouldJumpHorizontal = true;
+            jumpDirection = new Vector2(moveInput.x > 0 ? 1f : -1f, 0f); // Left or right
             isSticking = false;
-            stickCooldownTimer = stickCooldownAfterJump;
+            postJumpStickCooldownTimer = postJumpStickCooldownDuration; // Prevent sticking after jump
+        }
+
+        // Check for vertical jump (up/down)
+        if (isSticking && jumpCooldownTimer <= 0f && preJump != null && preJump.IsPressed() && Mathf.Abs(moveInput.y) > jumpThreshold)
+        {
+            shouldJumpVertical = true;
+            jumpDirection = new Vector2(0f, moveInput.y > 0 ? 1f : -1f); // Up or down
+            isSticking = false;
+            postJumpStickCooldownTimer = postJumpStickCooldownDuration; // Prevent sticking after jump
         }
 
         if (isSticking)
@@ -93,6 +94,12 @@ public class ClimbWallAbility : MonoBehaviour
                 isSticking = false;
             }
         }
+
+        if (postJumpStickCooldownTimer > 0f)
+        {
+            postJumpStickCooldownTimer -= Time.deltaTime;
+        }
+
         if (jumpCooldownTimer > 0f)
         {
             jumpCooldownTimer -= Time.deltaTime;
@@ -103,16 +110,16 @@ public class ClimbWallAbility : MonoBehaviour
     {
         if (leftHandRb == null || rightHandRb == null || bodyRb == null) return;
 
-        if (shouldJump)
+        if (shouldJumpHorizontal || shouldJumpVertical)
         {
-            ApplyJump(jumpDirection);
-            shouldJump = false;
+            ApplyJump(jumpDirection, shouldJumpVertical);
+            shouldJumpHorizontal = false;
+            shouldJumpVertical = false;
         }
 
         if (isSticking)
         {
             StickToWall();
-            MoveAlongWall(PlayerInputHandler.Instance.MoveInput.y); 
         }
     }
 
@@ -124,19 +131,15 @@ public class ClimbWallAbility : MonoBehaviour
         {
             case BodyPartStage.HeadOnly:
             case BodyPartStage.BodyConnected:
-                currentMoveSpeed = baseMoveSpeed;
                 currentJumpForce = baseJumpForce;
                 break;
             case BodyPartStage.RightArmConnected:
-                currentMoveSpeed = oneArmMoveSpeed;
                 currentJumpForce = oneArmJumpForce;
                 break;
             case BodyPartStage.TwoArmsConnected:
-                currentMoveSpeed = twoArmsMoveSpeed;
                 currentJumpForce = twoArmsJumpForce;
                 break;
             case BodyPartStage.FullyConnected:
-                currentMoveSpeed = fullBodyMoveSpeed;
                 currentJumpForce = fullBodyJumpForce;
                 break;
         }
@@ -195,37 +198,24 @@ public class ClimbWallAbility : MonoBehaviour
 
     private void MoveAlongWall(float verticalInput)
     {
-        if (Mathf.Abs(verticalInput) > 0.05f)
-        {
-            float adjustedInput = verticalInput;
-            if (verticalInput > 0)
-            {
-                adjustedInput = wallNormal.x < 0 ? -1f : 1f;
-            }
-            else if (verticalInput < 0)
-            {
-                adjustedInput = wallNormal.x < 0 ? 1f : -1f;
-            }
-
-            Vector2 wallTangent = new Vector2(-wallNormal.y, wallNormal.x);
-            Vector2 moveDirection = wallTangent * adjustedInput * currentMoveSpeed;
-            bodyRb.AddForce(moveDirection, ForceMode2D.Force);
-            if (!oneHandStuck || Physics2D.BoxCast(leftHandRb.position, wallCheckSize, leftHandRb.rotation, (leftHandRb.position - bodyRb.position).normalized, wallCheckDistance, climbWallLayer))
-                leftHandRb.AddForce(moveDirection * 0.5f, ForceMode2D.Force);
-            if (!oneHandStuck || Physics2D.BoxCast(rightHandRb.position, wallCheckSize, rightHandRb.rotation, (rightHandRb.position - bodyRb.position).normalized, wallCheckDistance, climbWallLayer))
-                rightHandRb.AddForce(moveDirection * 0.5f, ForceMode2D.Force);
-        }
+        // No vertical movement; this method is empty
     }
 
-    private void ApplyJump(float direction)
+    private void ApplyJump(Vector2 direction, bool isVerticalJump)
     {
         if (wallNormal == Vector2.zero)
         {
             wallNormal = -Vector2.up;
         }
 
-        Vector2 baseDirection = -wallNormal + Vector2.right * direction;
-        Vector2 jumpDirection = baseDirection.magnitude > 0.1f ? (baseDirection.normalized + Vector2.up).normalized : Vector2.up;
+        Vector2 baseDirection = -wallNormal + direction;
+        Vector2 jumpDirection = baseDirection.magnitude > 0.1f ? baseDirection.normalized : Vector2.up;
+
+        // Adjust jump direction for vertical jumps to emphasize up/down
+        if (isVerticalJump)
+        {
+            jumpDirection = new Vector2(0f, direction.y > 0 ? 1f : -1f).normalized + Vector2.up * 0.5f;
+        }
 
         float adjustedJumpForce = oneHandStuck ? currentJumpForce / 3f : currentJumpForce;
         bodyRb.AddForce(jumpDirection * adjustedJumpForce, ForceMode2D.Impulse);
