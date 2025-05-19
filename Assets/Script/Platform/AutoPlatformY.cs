@@ -3,11 +3,11 @@ using UnityEngine;
 public class AutoMovingPlatformY : MonoBehaviour
 {
     [Header("Platform Settings")]
-    [SerializeField] private float highPositionY; // Y position when platform moves up
-    [SerializeField] private float lowPositionY; // Y position when platform is down
-    [SerializeField] private float moveSpeed = 5f; // Speed of direct movement
-    [SerializeField] private bool moveUpWhenStepped = true; // Toggle to choose up or down when player steps on
-    [SerializeField] private float moveDelay = 1f; // Delay before platform moves after player steps on
+    [SerializeField] private float highPositionY; 
+    [SerializeField] private float lowPositionY; 
+    [SerializeField] private float moveSpeed = 5f; 
+    [SerializeField] private bool moveUpWhenStepped = true; 
+    [SerializeField] private float moveDelay = 1f; 
 
     private Rigidbody2D platformRigidbody;
     private Vector2 targetPosition;
@@ -17,26 +17,23 @@ public class AutoMovingPlatformY : MonoBehaviour
 
     void Awake()
     {
-        // Initialize platform components
         platformRigidbody = GetComponent<Rigidbody2D>();
         if (platformRigidbody == null)
         {
             Debug.LogError("Rigidbody2D not found on platform GameObject!");
         }
 
-        // Set initial position to low
         targetPosition = new Vector2(transform.position.x, lowPositionY);
     }
 
     void Start()
     {
-        // Ensure platform starts at low position
+
         transform.position = new Vector2(transform.position.x, lowPositionY);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Start delay when player collides with platform
         if (collision.collider.CompareTag("Player") && !playerOnPlatform)
         {
             playerOnPlatform = true;

@@ -87,6 +87,24 @@ MonoBehaviour:
   - {fileID: 0}
   teleportLocation: {fileID: 5765206008781943995}
   cooldownTime: 2
+  checkRadius: 0.5
+  teleport:
+    m_Name: Teleport
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 9beeaf66-bd10-476e-a8c1-9dbd8ee71846
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 189fe7a9-580f-4711-845a-0ef97a2a2151
+      m_Path: <Keyboard>/t
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Teleport
+      m_Flags: 0
+    m_Flags: 0
 --- !u!212 &990835823997596406
 SpriteRenderer:
   m_ObjectHideFlags: 0

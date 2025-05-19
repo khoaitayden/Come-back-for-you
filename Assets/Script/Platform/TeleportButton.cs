@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using UnityEngine.InputSystem;
 public class TeleportButton : MonoBehaviour
 {
     [Header("Button Settings")]
@@ -12,10 +12,22 @@ public class TeleportButton : MonoBehaviour
     [SerializeField] private List<GameObject> teleportTargets = new List<GameObject>(); // List of objects to teleport
     [SerializeField] private Transform teleportLocation; // Destination location
     [SerializeField] private float cooldownTime = 2f; // Cooldown duration in seconds
+    [SerializeField] private float checkRadius = 0.5f; // Radius to check for player standing on button
+    [SerializeField] private InputAction teleport; // Customizable teleport input action
 
     private SpriteRenderer spriteRenderer;
     private float cooldownTimer = 0f;
     private bool isOnCooldown = false;
+
+    void OnEnable()
+    {
+        teleport.Enable();
+    }
+
+    void OnDisable()
+    {
+        teleport.Disable();
+    }
 
     void Awake()
     {
@@ -42,15 +54,24 @@ public class TeleportButton : MonoBehaviour
                 Debug.Log("Button cooldown finished!");
             }
         }
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (!other.isTrigger && other.CompareTag("Player") && !isOnCooldown)
+        else if (teleport.WasPressedThisFrame() && IsPlayerOnButton())
         {
             TeleportObjects();
-            Debug.Log("Button triggered by Player!");
+            Debug.Log("Button triggered by Player with teleport action!");
         }
+    }
+
+    bool IsPlayerOnButton()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, checkRadius);
+        foreach (Collider2D hit in hits)
+        {
+            if (!hit.isTrigger && hit.CompareTag("Player"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     void TeleportObjects()
@@ -85,19 +106,14 @@ public class TeleportButton : MonoBehaviour
         }
     }
 
-    // Visualize the teleport location in the Scene view
     void OnDrawGizmos()
     {
         if (teleportLocation)
         {
-            // Draw a yellow sphere at the teleport location
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(teleportLocation.position, 0.3f);
-
-            // Display a label with the position
-            #if UNITY_EDITOR
-            UnityEditor.Handles.Label(teleportLocation.position, $"Teleport Location: {teleportLocation.position:F2}");
-            #endif
         }
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, checkRadius); // Show detection radius
     }
 }

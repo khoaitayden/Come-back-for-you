@@ -3,10 +3,10 @@ using UnityEngine;
 public class AutoMovingPlatformX : MonoBehaviour
 {
     [Header("Platform Settings")]
-    [SerializeField] private float moveDistance = 5f; // Distance to move right from initial position
-    [SerializeField] private float moveSpeed = 5f; // Speed of movement
-    [SerializeField] private bool moveRightWhenStepped = true; // Move right or left when stepped on
-    [SerializeField] private float moveDelay = 1f; // Delay before moving
+    [SerializeField] private float moveDistance = 5f;
+    [SerializeField] private float moveSpeed = 5f; 
+    [SerializeField] private bool moveRightWhenStepped = true; 
+    [SerializeField] private float moveDelay = 1f; 
 
     private Rigidbody2D platformRigidbody;
     private Vector2 targetPosition;
@@ -28,11 +28,10 @@ public class AutoMovingPlatformX : MonoBehaviour
 
     void Start()
     {
-        // Set left position to initial X, right position as offset
         leftPositionX = transform.position.x;
         rightPositionX = leftPositionX + moveDistance;
         targetPosition = new Vector2(leftPositionX, transform.position.y);
-        transform.position = targetPosition; // Ensure exact start position
+        transform.position = targetPosition; 
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -82,24 +81,20 @@ public class AutoMovingPlatformX : MonoBehaviour
         }
     }
 
-    // Visualize the travel distance in the Scene view
     void OnDrawGizmos()
     {
-        // Use current position for X and Y, calculate positions based on moveDistance
         float gizmoLeftX = transform.position.x;
         float gizmoRightX = gizmoLeftX + moveDistance;
         Vector3 leftPos = new Vector3(gizmoLeftX, transform.position.y, transform.position.z);
         Vector3 rightPos = new Vector3(gizmoRightX, transform.position.y, transform.position.z);
 
-        // Draw a green line between left and right positions
         Gizmos.color = Color.green;
         Gizmos.DrawLine(leftPos, rightPos);
 
-        // Draw blue sphere at left position
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(leftPos, 0.2f);
 
-        // Draw red sphere at right position
+
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(rightPos, 0.2f);
 
