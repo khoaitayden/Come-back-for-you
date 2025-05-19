@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 public class DoorTrigger : MonoBehaviour
 {
     [Header("Door Settings")]
-    [SerializeField] private float checkRadius = 0.5f; // Radius to check for player contact
-    [SerializeField] private InputAction teleport; // Input action for teleport/door activation (e.g., 'T' key)
+    [SerializeField] private float checkRadius;
+    [SerializeField] private InputAction teleport;
 
     void OnEnable()
     {
@@ -22,8 +22,7 @@ public class DoorTrigger : MonoBehaviour
     {
         if (teleport.WasPressedThisFrame() && IsPlayerTouching())
         {
-            Debug.Log("Door triggered by Player with 'T' key! Loading EndScene...");
-            SceneManager.LoadScene("EndScene"); // Load the EndScene
+            SceneManager.LoadScene("EndScene");
         }
     }
 
@@ -40,9 +39,4 @@ public class DoorTrigger : MonoBehaviour
         return false;
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, checkRadius); // Show detection radius
-    }
 }

@@ -2,19 +2,21 @@ using UnityEngine;
 
 public class TrapBehavior : MonoBehaviour
 {
+    [SerializeField] private Transform teleport; // Target transform to teleport the player to
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Player"))
         {
-            Debug.Log("Player hit the trap!");
-            RestartScene();
-            Debug.Log(collision.collider.name);
+            TeleportPlayer(collision.collider.gameObject);
         }
     }
-    void RestartScene()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
-    }
 
+    void TeleportPlayer(GameObject player)
+    {
+        if (teleport != null)
+        {
+            player.transform.position = teleport.position;
+        }
+    }
 }
