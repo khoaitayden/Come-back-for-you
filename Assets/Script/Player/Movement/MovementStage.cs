@@ -62,23 +62,23 @@ public class MovementStage : MonoBehaviour
         {
             case BodyPartStage.HeadOnly:
                 if (headMovementScript != null) headMovementScript.enabled = true;
-                camera.orthographicSize = 8f;
+                camera.orthographicSize = 6f;
                 break;
             case BodyPartStage.BodyConnected:
                 if (headBodyMovementScript != null) headBodyMovementScript.enabled = true;
-                camera.orthographicSize = 10f;
+                camera.orthographicSize = 8f;
                 break;
             case BodyPartStage.RightArmConnected:
                 if (headBodyAndOneArmScript != null) headBodyAndOneArmScript.enabled = true;
-                camera.orthographicSize = 12f;
+                camera.orthographicSize = 10f;
                 break;
             case BodyPartStage.TwoArmsConnected:
                 if (headBodyAndTwoArmsScript != null) headBodyAndTwoArmsScript.enabled = true;
-                camera.orthographicSize = 14f;
+                camera.orthographicSize = 10f;
                 break;
             case BodyPartStage.FullyConnected:
                 if (fullBodyScript != null) fullBodyScript.enabled = true;
-                camera.orthographicSize = 16f;
+                camera.orthographicSize = 10f;
                 break;
         }
     }

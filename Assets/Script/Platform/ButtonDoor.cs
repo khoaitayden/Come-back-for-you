@@ -15,7 +15,10 @@ public class ButtonDoor : MonoBehaviour
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = offSprite;
+        if (spriteRenderer)
+        {
+            spriteRenderer.sprite = offSprite;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)

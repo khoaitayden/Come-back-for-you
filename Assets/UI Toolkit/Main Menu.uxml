@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<engine:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:engine="UnityEngine.UIElements"
-    xmlns:editor="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
->
-    
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Form.uss?fileID=7433441132597879392&amp;guid=f35f7abfd45395f4a8f652b034e05850&amp;type=3#Form" />
+    <engine:VisualElement name="MainMenu" style="flex-grow: 1;">
+        <engine:Label text="Come back for you" name="Title" class="heading1" style="align-items: center; -unity-text-align: upper-center;" />
+        <engine:Button text="Start" name="StartButton" class="button" />
+        <engine:Button text="Backstory" name="StoryButton" class="button" />
+    </engine:VisualElement>
 </engine:UXML>

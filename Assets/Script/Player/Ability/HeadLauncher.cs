@@ -23,8 +23,6 @@ public class HeadLauncher : MonoBehaviour
     {
         Launch.Enable();
         Launch.performed += LaunchHeadInDirection;
-            //if (PlayerInputHandler.Instance != null)
-            //PlayerInputHandler.Instance.OnLaunchPressed += LaunchHeadInDirection;
     }
 
     private void OnDisable()

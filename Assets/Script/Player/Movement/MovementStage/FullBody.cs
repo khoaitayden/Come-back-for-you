@@ -12,27 +12,27 @@ public class FullBody : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Movement Settings")]
-    [SerializeField] private float stepFrequency = 0.5f;
-    [SerializeField] private float stepForce = 10f;
-    [SerializeField] private float legSwingTorque = 5f;
-    [SerializeField] private float stabilizationForce = 2f;
-    [SerializeField] private float balanceTorque = 3f;
-    [SerializeField] private float armBalanceTorque = 1.5f;
-    [SerializeField] private float legUprightTorque = 15f;
+    [SerializeField] private float stepFrequency ;
+    [SerializeField] private float stepForce ;
+    [SerializeField] private float legSwingTorque;
+    [SerializeField] private float stabilizationForce ;
+    [SerializeField] private float balanceTorque;
+    [SerializeField] private float armBalanceTorque ;
+    [SerializeField] private float legUprightTorque ;
 
     [Header("Jump Settings")]
-    [SerializeField] private float jumpForce = 15f;
-    [SerializeField] private float legPushForce = 3f;
-    [SerializeField] private float airControlForce = 5f;
-    [SerializeField] private float jumpCooldownDuration = 0.5f;
+    [SerializeField] private float jumpForce ;
+    [SerializeField] private float legPushForce ;
+    [SerializeField] private float airControlForce;
+    [SerializeField] private float jumpCooldownDuration ;
 
     [Header("Fall Settings")]
-    [SerializeField] private float normalGravityScale = 1f;
-    [SerializeField] private float fallGravityScale = 3f;
+    [SerializeField] private float normalGravityScale;
+    [SerializeField] private float fallGravityScale ;
 
     [Header("Ground Check Settings")]
-    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.73f, 0.14f);
-    [SerializeField] private float groundCheckDistance = 0.01f;
+    [SerializeField] private Vector2 groundCheckSize;
+    [SerializeField] private float groundCheckDistance ;
 
     private Vector2 moveInput;
     private float stepTimer;

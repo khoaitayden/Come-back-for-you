@@ -9,11 +9,11 @@ public class HeadBodyMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Movement Settings")]
-    [SerializeField] private float headMoveForce = 10f;
-    [SerializeField] private float jumpForce = 7f;
-    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.5f, 0.1f); 
-    [SerializeField] private float bodyInfluenceFactor = 0.5f; 
-    [SerializeField] private float groundCheckDistance = 0.1f; 
+    [SerializeField] private float headMoveForce;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private Vector2 groundCheckSize; 
+    [SerializeField] private float bodyInfluenceFactor; 
+    [SerializeField] private float groundCheckDistance; 
 
     private Vector2 currentInput = Vector2.zero;
     private bool isJumping = false;

@@ -11,29 +11,29 @@ public class ClimbWallAbility : MonoBehaviour
     [SerializeField] private MovementStage movementStage; 
 
     [Header("Climb Settings")]
-    [SerializeField] private float baseStickForce = 10f;
-    [SerializeField] private float maxStickTime = 3f;
+    [SerializeField] private float baseStickForce;
+    [SerializeField] private float maxStickTime;
     [SerializeField] private Vector2 wallCheckSize;
-    [SerializeField] private float wallCheckDistance = 0.1f;
+    [SerializeField] private float wallCheckDistance;
 
     [Header("Jump Settings")]
-    [SerializeField] private float jumpCooldownDuration = 1f;
-    [SerializeField] private float jumpThreshold = 0.5f; 
-    [SerializeField] private float postJumpStickCooldownDuration = 0.3f; // Brief delay to prevent sticking after jump
+    [SerializeField] private float jumpCooldownDuration;
+    [SerializeField] private float jumpThreshold; 
+    [SerializeField] private float postJumpStickCooldownDuration; 
 
     [Header("Stage-Specific Settings")]
-    [SerializeField] private float baseJumpForce = 15f;
-    [SerializeField] private float oneArmJumpForce = 15f;
-    [SerializeField] private float twoArmsJumpForce = 18f;
-    [SerializeField] private float fullBodyJumpForce = 20f;
+    [SerializeField] private float baseJumpForce;
+    [SerializeField] private float oneArmJumpForce;
+    [SerializeField] private float twoArmsJumpForce;
+    [SerializeField] private float fullBodyJumpForce;
 
     [Header("Input")]
     [SerializeField] private InputAction preJump;
 
     private bool isSticking = false;
-    private float stickTimer = 0f;
-    private float jumpCooldownTimer = 0f;
-    private float postJumpStickCooldownTimer = 0f;
+    private float stickTimer;
+    private float jumpCooldownTimer;
+    private float postJumpStickCooldownTimer;
     private Vector2 wallNormal;
     private bool oneHandStuck = false;
     private float currentJumpForce;
@@ -196,10 +196,6 @@ public class ClimbWallAbility : MonoBehaviour
         }
     }
 
-    private void MoveAlongWall(float verticalInput)
-    {
-        // No vertical movement; this method is empty
-    }
 
     private void ApplyJump(Vector2 direction, bool isVerticalJump)
     {
@@ -211,7 +207,6 @@ public class ClimbWallAbility : MonoBehaviour
         Vector2 baseDirection = -wallNormal + direction;
         Vector2 jumpDirection = baseDirection.magnitude > 0.1f ? baseDirection.normalized : Vector2.up;
 
-        // Adjust jump direction for vertical jumps to emphasize up/down
         if (isVerticalJump)
         {
             jumpDirection = new Vector2(0f, direction.y > 0 ? 1f : -1f).normalized + Vector2.up * 0.5f;

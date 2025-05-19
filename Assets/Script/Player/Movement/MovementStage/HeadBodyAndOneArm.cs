@@ -17,8 +17,8 @@ public class HeadBodyAndOneArm : MonoBehaviour
     [SerializeField] private float midAirControlForce ;
 
     [Header("Ground Check Settings")]
-    [SerializeField] private Vector2 groundCheckSize = new Vector2(1.9f, 0.56f);
-    [SerializeField] private float groundCheckDistance = 0.1f;
+    [SerializeField] private Vector2 groundCheckSize ;
+    [SerializeField] private float groundCheckDistance ;
 
     [Header("Wall Check Settings")]
     [SerializeField] private float wallCheckDistance;

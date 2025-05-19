@@ -3,17 +3,17 @@ using UnityEngine;
 public class ButtonPlatformY : MonoBehaviour
 {
     [Header("Button Settings")]
-    [SerializeField] private Sprite offSprite; // Sprite when button is off
-    [SerializeField] private Sprite onSprite; // Sprite when button is on
-    [SerializeField] private bool startOn = false; // Toggle to choose starting state (on or off)
+    [SerializeField] private Sprite offSprite; 
+    [SerializeField] private Sprite onSprite; 
+    [SerializeField] private bool startOn = false; 
 
     [Header("Platform Settings")]
-    [SerializeField] private GameObject platform; // Reference to the platform GameObject
-    [SerializeField] private float moveDistance = 5f; // Distance to move up from initial position
-    [SerializeField] private float moveSpeed = 5f; // Speed of movement
-    [SerializeField] private float moveDelay = 1f; // Delay before platform moves after button toggle
-    [SerializeField] private bool shouldAutoOff = true; // Toggle to enable/disable auto-off
-    [SerializeField] private float autoOffDelay = 2f; // Time before platform returns to off state
+    [SerializeField] private GameObject platform; 
+    [SerializeField] private float moveDistance; 
+    [SerializeField] private float moveSpeed; 
+    [SerializeField] private float moveDelay; 
+    [SerializeField] private bool shouldAutoOff = true; 
+    [SerializeField] private float autoOffDelay;
 
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D platformRigidbody;
@@ -21,7 +21,7 @@ public class ButtonPlatformY : MonoBehaviour
     private Vector2 targetPosition;
     private float delayTimer = 0f;
     private bool isDelayed = false;
-    private bool targetIsOn = false; // Tracks the target state after delay
+    private bool targetIsOn = false;
     private float lowPositionY;
     private float highPositionY;
     private float autoOffTimer = 0f;
@@ -29,64 +29,43 @@ public class ButtonPlatformY : MonoBehaviour
 
     void Awake()
     {
-        // Initialize button components (self)
         spriteRenderer = GetComponent<SpriteRenderer>();
-        if (!spriteRenderer)
-        {
-            Debug.LogError("SpriteRenderer not found on button GameObject!");
-        }
-
-        // Initialize platform components
         if (platform)
         {
             platformRigidbody = platform.GetComponent<Rigidbody2D>();
-            if (!platformRigidbody)
-            {
-                Debug.LogError("Rigidbody2D not found on platform GameObject!");
-            }
         }
-        else
-        {
-            Debug.LogError("Platform GameObject not assigned!");
-        }
-
-        // Set initial state based on startOn toggle
         isOn = startOn;
-        spriteRenderer.sprite = isOn ? onSprite : offSprite;
+        if (spriteRenderer)
+            spriteRenderer.sprite = isOn ? onSprite : offSprite;
     }
 
     void Start()
     {
         if (!platform) return;
 
-        // Set low position to initial Y, high position as offset
         lowPositionY = platform.transform.position.y;
         highPositionY = lowPositionY + moveDistance;
         targetPosition = new Vector2(platform.transform.position.x, isOn ? highPositionY : lowPositionY);
-        platform.transform.position = targetPosition; // Ensure exact start position
+        platform.transform.position = targetPosition;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Trigger button toggle only when a "Player" tagged non-trigger Collider2D enters
         if (!other.isTrigger && other.CompareTag("Player"))
         {
             ToggleButton();
             playerOnPlatform = true;
-            Debug.Log("Button toggled by Player!");
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        // Start auto-off timer when player steps off
         if (!other.isTrigger && other.CompareTag("Player"))
         {
             playerOnPlatform = false;
             if (shouldAutoOff && isOn)
             {
                 autoOffTimer = 0f;
-                Debug.Log($"Player stepped off, starting auto-off timer of {autoOffDelay} seconds!");
             }
         }
     }
@@ -98,12 +77,9 @@ public class ButtonPlatformY : MonoBehaviour
         {
             spriteRenderer.sprite = isOn ? onSprite : offSprite;
         }
-
-        // Start delay before moving platform
         isDelayed = true;
         delayTimer = 0f;
         targetIsOn = isOn;
-        Debug.Log($"Button toggled to {(isOn ? "on" : "off")}, starting delay of {moveDelay} seconds before platform moves!");
     }
 
     void Update()
@@ -115,11 +91,9 @@ public class ButtonPlatformY : MonoBehaviour
             {
                 isDelayed = false;
                 targetPosition = new Vector2(platform.transform.position.x, targetIsOn ? highPositionY : lowPositionY);
-                Debug.Log($"Delay finished, moving platform to {(targetIsOn ? "high" : "low")} position!");
             }
         }
 
-        // Handle auto-off timer only after player steps off
         if (!playerOnPlatform && shouldAutoOff && isOn)
         {
             autoOffTimer += Time.deltaTime;
@@ -131,7 +105,6 @@ public class ButtonPlatformY : MonoBehaviour
                     spriteRenderer.sprite = offSprite;
                 }
                 targetPosition = new Vector2(platform.transform.position.x, lowPositionY);
-                Debug.Log("Platform auto-returned to off state!");
                 autoOffTimer = 0f;
             }
         }
@@ -141,32 +114,25 @@ public class ButtonPlatformY : MonoBehaviour
     {
         if (!platformRigidbody) return;
 
-        // Direct position-based movement
         platformRigidbody.MovePosition(Vector2.MoveTowards(platformRigidbody.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
     }
 
-    // Visualize the platform's travel distance in the Scene view
     void OnDrawGizmos()
     {
         if (!platform) return;
 
-        // Define positions for low and high points using platform's X coordinate
         float gizmoLowY = platform.transform.position.y;
         float gizmoHighY = gizmoLowY + moveDistance;
         Vector3 lowPos = new Vector3(platform.transform.position.x, gizmoLowY, platform.transform.position.z);
         Vector3 highPos = new Vector3(platform.transform.position.x, gizmoHighY, platform.transform.position.z);
 
-        // Draw a green line between low and high positions
         Gizmos.color = Color.green;
         Gizmos.DrawLine(lowPos, highPos);
 
-        // Draw blue sphere at low position
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(lowPos, 0.2f);
 
-        // Draw red sphere at high position
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(highPos, 0.2f);
-
     }
 }

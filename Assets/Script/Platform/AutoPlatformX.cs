@@ -3,10 +3,10 @@ using UnityEngine;
 public class AutoMovingPlatformX : MonoBehaviour
 {
     [Header("Platform Settings")]
-    [SerializeField] private float moveDistance = 5f;
-    [SerializeField] private float moveSpeed = 5f; 
+    [SerializeField] private float moveDistance;
+    [SerializeField] private float moveSpeed; 
     [SerializeField] private bool moveRightWhenStepped = true; 
-    [SerializeField] private float moveDelay = 1f; 
+    [SerializeField] private float moveDelay; 
 
     private Rigidbody2D platformRigidbody;
     private Vector2 targetPosition;
@@ -18,12 +18,7 @@ public class AutoMovingPlatformX : MonoBehaviour
 
     void Awake()
     {
-        // Initialize platform components
         platformRigidbody = GetComponent<Rigidbody2D>();
-        if (!platformRigidbody)
-        {
-            Debug.LogError("Rigidbody2D not found on platform GameObject!");
-        }
     }
 
     void Start()
@@ -41,7 +36,6 @@ public class AutoMovingPlatformX : MonoBehaviour
             playerOnPlatform = true;
             isDelayed = true;
             delayTimer = 0f;
-            Debug.Log("Player stepped on platform, starting delay!");
         }
     }
 
@@ -52,7 +46,6 @@ public class AutoMovingPlatformX : MonoBehaviour
             playerOnPlatform = false;
             isDelayed = false;
             targetPosition = new Vector2(moveRightWhenStepped ? leftPositionX : rightPositionX, transform.position.y);
-            Debug.Log($"Player stepped off, moving to {(moveRightWhenStepped ? "left" : "right")} position!");
         }
     }
 
@@ -67,7 +60,6 @@ public class AutoMovingPlatformX : MonoBehaviour
                 if (playerOnPlatform)
                 {
                     targetPosition = new Vector2(moveRightWhenStepped ? rightPositionX : leftPositionX, transform.position.y);
-                    Debug.Log($"Delay finished, moving {(moveRightWhenStepped ? "right" : "left")}!");
                 }
             }
         }
@@ -94,9 +86,7 @@ public class AutoMovingPlatformX : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(leftPos, 0.2f);
 
-
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(rightPos, 0.2f);
-
     }
 }

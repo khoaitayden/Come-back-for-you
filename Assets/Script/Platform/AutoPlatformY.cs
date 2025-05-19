@@ -5,9 +5,9 @@ public class AutoMovingPlatformY : MonoBehaviour
     [Header("Platform Settings")]
     [SerializeField] private float highPositionY; 
     [SerializeField] private float lowPositionY; 
-    [SerializeField] private float moveSpeed = 5f; 
+    [SerializeField] private float moveSpeed; 
     [SerializeField] private bool moveUpWhenStepped = true; 
-    [SerializeField] private float moveDelay = 1f; 
+    [SerializeField] private float moveDelay; 
 
     private Rigidbody2D platformRigidbody;
     private Vector2 targetPosition;
@@ -65,6 +65,7 @@ public class AutoMovingPlatformY : MonoBehaviour
     void FixedUpdate()
     {
         if (platformRigidbody == null) return;
+
         platformRigidbody.MovePosition(Vector2.MoveTowards(platformRigidbody.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
     }
 
