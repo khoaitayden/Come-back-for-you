@@ -18,7 +18,6 @@ public class SnakeMovement : MonoBehaviour
         {
             headRigidbody = GetComponent<Rigidbody2D>();
         }
-
         if (destinations.Count > 0 && destinations[0] != null)
         {
             currentDestinationPosition = destinations[0].transform.position;
@@ -43,7 +42,8 @@ public class SnakeMovement : MonoBehaviour
         Vector2 direction = (currentDestinationPosition - headRigidbody.position).normalized;
         headRigidbody.linearVelocity = direction * moveSpeed;
 
-        if (Vector2.Distance(headRigidbody.position, currentDestinationPosition) < reachThreshold)
+        float distance = Vector2.Distance(headRigidbody.position, currentDestinationPosition);
+        if (distance < reachThreshold)
         {
             MoveToNextDestination();
         }
@@ -76,22 +76,21 @@ public class SnakeMovement : MonoBehaviour
         }
     }
 
-    public void TeleportToLocation(Transform targetTransform)
+    public void AddDestination(GameObject newDestination)
     {
-        if (targetTransform != null)
+        if (newDestination != null)
         {
-            headRigidbody.linearVelocity = Vector2.zero;
-            headRigidbody.position = targetTransform.position;
-
-            if (destinations.Count > 0 && destinations[0] != null)
+            destinations.Add(newDestination);
+            if (destinations.Count == 1)
             {
                 currentDestinationIndex = 0;
-                currentDestinationPosition = destinations[0].transform.position;
-            }
-            else
-            {
-                currentDestinationPosition = headRigidbody.position;
+                currentDestinationPosition = newDestination.transform.position;
             }
         }
+    }
+
+    public void SetLoopDestinations(bool shouldLoop)
+    {
+        loopDestinations = shouldLoop;
     }
 }

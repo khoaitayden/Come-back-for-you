@@ -12,18 +12,18 @@ public class FullBodyNPC : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Stability Settings")]
-    [SerializeField] private float stabilizationForce = 2f;
-    [SerializeField] private float balanceTorque = 3f;
-    [SerializeField] private float armBalanceTorque = 1.5f;
-    [SerializeField] private float legUprightTorque = 15f;
+    [SerializeField] private float stabilizationForce;
+    [SerializeField] private float balanceTorque;
+    [SerializeField] private float armBalanceTorque;
+    [SerializeField] private float legUprightTorque;
 
     [Header("Fall Settings")]
-    [SerializeField] private float normalGravityScale = 1f;
-    [SerializeField] private float fallGravityScale = 3f;
+    [SerializeField] private float normalGravityScale;
+    [SerializeField] private float fallGravityScale;
 
     [Header("Ground Check Settings")]
-    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.73f, 0.14f);
-    [SerializeField] private float groundCheckDistance = 0.01f;
+    [SerializeField] private Vector2 groundCheckSize;
+    [SerializeField] private float groundCheckDistance;
 
     private bool isLegGrounded;
     private bool bothLegsGrounded;
