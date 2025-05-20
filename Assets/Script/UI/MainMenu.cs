@@ -15,7 +15,7 @@ public class MainMenu : MonoBehaviour
     private Label sfxText;
 
     [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private AudioSource buttonSoundSource; // Reference to the external AudioSource
+    [SerializeField] private AudioSource buttonSoundSource;
 
     void OnEnable()
     {

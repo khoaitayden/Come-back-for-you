@@ -6,7 +6,7 @@ public class BackStory : MonoBehaviour
     private UIDocument backstoryDocument;
     [SerializeField] private GameObject mainMenuPanel;
     private Button backButton;
-    [SerializeField] private AudioSource buttonSoundSource; // Reference to the external AudioSource
+    [SerializeField] private AudioSource buttonSoundSource;
 
     private void OnEnable()
     {
