@@ -17,4 +17,41 @@
     align-self: center;
     font-size: 69px;
     -unity-font-definition: url("project://database/Assets/Art/joystix%20monospace.otf?fileID=12800000&guid=297983744b178d94db7ea16b36808887&type=3#joystix monospace");
+    background-color: rgb(145, 145, 145);
+    -unity-background-image-tint-color: rgb(255, 0, 0);
+}
+
+.button:hover {
+    background-color: rgb(141, 5, 5);
+}
+
+#SFXSlider Label {
+    align-self: center;
+    margin-left: 0;
+    align-items: center;
+    flex-shrink: 0;
+    background-size: 0 0;
+    opacity: 1;
+    display: none;
+}
+
+#MusicSlider Label {
+    justify-content: center;
+    flex-direction: column;
+    align-self: center;
+    display: none;
+    opacity: 1;
+}
+
+#VolumeSlider > #SFXSlider > .unity-slider__input {
+}
+
+#VolumeSlider > #MusicSlider > .unity-slider__input {
+}
+
+.heading2 {
+    font-size: 60px;
+    -unity-font-definition: url("project://database/Assets/Art/joystix%20monospace.otf?fileID=12800000&guid=297983744b178d94db7ea16b36808887&type=3#joystix monospace");
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(255, 255, 255);
 }

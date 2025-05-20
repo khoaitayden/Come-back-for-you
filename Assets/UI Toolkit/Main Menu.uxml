@@ -1,8 +1,14 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/Form.uss?fileID=7433441132597879392&amp;guid=f35f7abfd45395f4a8f652b034e05850&amp;type=3#Form" />
-    <engine:VisualElement name="MainMenu" style="flex-grow: 1;">
+    <engine:VisualElement name="MainMenu" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Art/MainMenu/Main%20Menu.png?fileID=2800000&amp;guid=5cb7d78b88e70554baabc343ecad78a9&amp;type=3#Main Menu&quot;);">
         <engine:Label text="Come back for you" name="Title" class="heading1" style="align-items: center; -unity-text-align: upper-center;" />
-        <engine:Button text="Start" name="StartButton" class="button" />
-        <engine:Button text="Backstory" name="StoryButton" class="button" />
+        <engine:Button text="Start" name="StartButton" class="button" style="margin-top: 100px;" />
+        <engine:Button text="Backstory" name="StoryButton" class="button" style="margin-top: 300px;" />
+    </engine:VisualElement>
+    <engine:VisualElement name="VolumeSlider" style="flex-grow: 1; position: absolute; width: 1691px; top: 644px; left: 142px; flex-direction: row; justify-content: space-between;">
+        <engine:Slider label="Slider" value="42" high-value="1" name="MusicSlider" style="width: 40%;" />
+        <engine:Label text="Music" name="MusicText" class="heading2" style="position: absolute; top: -72px; left: 160px; color: rgb(0, 0, 0);" />
+        <engine:Slider label="Slider" value="42" high-value="1" name="SFXSlider" style="width: 40%;" />
+        <engine:Label text="SFX" name="SFXText" class="heading2" style="position: absolute; top: -94px; left: 1172px; color: rgb(0, 0, 0);" />
     </engine:VisualElement>
 </engine:UXML>

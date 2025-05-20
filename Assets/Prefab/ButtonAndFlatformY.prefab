@@ -149,10 +149,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offSprite: {fileID: -5791533861771406970, guid: 43f28b1081410284b996841921c5232b, type: 3}
   onSprite: {fileID: -1170226526, guid: 43f28b1081410284b996841921c5232b, type: 3}
+  startOn: 0
   platform: {fileID: 6746268469852929711}
-  highPositionY: -8.3
-  lowPositionY: -9.8
+  moveDistance: 0
   moveSpeed: 5
+  moveDelay: 0
+  shouldAutoOff: 1
+  autoOffDelay: 0
 --- !u!1 &5002863900470856492
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +268,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 176fe19fdc91e7f4ba23cb37600bda75, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.3283019, g: 0.3283019, b: 0.3283019, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

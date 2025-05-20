@@ -1,0 +1,11 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Form.uss?fileID=7433441132597879392&amp;guid=f35f7abfd45395f4a8f652b034e05850&amp;type=3#Form" />
+    <engine:Button text="MAIN MENU" name="MainButton" class="button" style="margin-top: 120px;" />
+    <engine:VisualElement name="VolumeSlider" style="flex-grow: 1; flex-direction: row; align-self: auto; justify-content: space-between; margin-bottom: 0; height: 39px; top: 510px; position: absolute; width: 1415px; left: 280px;">
+        <engine:Slider label="Slider" value="42" high-value="1" name="MusicSlider" style="width: 40%; flex-direction: column; height: 23px;" />
+        <engine:Slider label="Slider" value="42" high-value="1" name="SFXSlider" style="height: 0; width: 40%; flex-direction: column;" />
+        <engine:Label text="Music" name="MusicText" class="heading2" style="position: absolute; top: -101px; left: 91px; width: 410px;" />
+        <engine:Label text="SFX" name="SFXText" class="heading2" style="position: absolute; top: -110px; left: 1004px; width: 410px;" />
+    </engine:VisualElement>
+    <engine:Button text="BACK" name="BackButton" class="button" style="margin-top: 400px;" />
+</engine:UXML>
