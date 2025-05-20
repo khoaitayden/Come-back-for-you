@@ -9,6 +9,10 @@ public class ButtonDoor : MonoBehaviour
     [Header("Door Settings")]
     [SerializeField] private GameObject door;
 
+    [Header("Sound Settings")]
+    [SerializeField] private AudioSource buttonClickSoundSource; 
+    [SerializeField] private AudioSource doorOpenSoundSource;
+
     private SpriteRenderer spriteRenderer;
     private bool hasBeenPressed = false;
 
@@ -39,6 +43,14 @@ public class ButtonDoor : MonoBehaviour
         if (door)
         {
             door.SetActive(false);
+        }
+        if (buttonClickSoundSource != null)
+        {
+            buttonClickSoundSource.Play();
+        }
+        if (doorOpenSoundSource != null)
+        {
+            doorOpenSoundSource.Play();
         }
     }
 }

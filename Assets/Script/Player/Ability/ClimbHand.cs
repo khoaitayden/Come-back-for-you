@@ -30,6 +30,9 @@ public class ClimbWallAbility : MonoBehaviour
     [Header("Input")]
     [SerializeField] private InputAction preJump;
 
+    [Header("Sound Settings")]
+    [SerializeField] private AudioSource stickSoundSource;
+
     private bool isSticking = false;
     private float stickTimer;
     private float jumpCooldownTimer;
@@ -40,6 +43,7 @@ public class ClimbWallAbility : MonoBehaviour
     private bool shouldJumpHorizontal = false;
     private bool shouldJumpVertical = false;
     private Vector2 jumpDirection;
+    private bool wasSticking = false;
 
     private void OnEnable()
     {
@@ -68,22 +72,20 @@ public class ClimbWallAbility : MonoBehaviour
             stickTimer = oneHandStuck ? maxStickTime / 2f : maxStickTime;
         }
 
-        // Check for horizontal jump (left/right)
         if (isSticking && jumpCooldownTimer <= 0f && preJump != null && preJump.IsPressed() && Mathf.Abs(moveInput.x) > jumpThreshold)
         {
             shouldJumpHorizontal = true;
-            jumpDirection = new Vector2(moveInput.x > 0 ? 1f : -1f, 0f); // Left or right
+            jumpDirection = new Vector2(moveInput.x > 0 ? 1f : -1f, 0f); 
             isSticking = false;
-            postJumpStickCooldownTimer = postJumpStickCooldownDuration; // Prevent sticking after jump
+            postJumpStickCooldownTimer = postJumpStickCooldownDuration; 
         }
 
-        // Check for vertical jump (up/down)
         if (isSticking && jumpCooldownTimer <= 0f && preJump != null && preJump.IsPressed() && Mathf.Abs(moveInput.y) > jumpThreshold)
         {
             shouldJumpVertical = true;
-            jumpDirection = new Vector2(0f, moveInput.y > 0 ? 1f : -1f); // Up or down
+            jumpDirection = new Vector2(0f, moveInput.y > 0 ? 1f : -1f); 
             isSticking = false;
-            postJumpStickCooldownTimer = postJumpStickCooldownDuration; // Prevent sticking after jump
+            postJumpStickCooldownTimer = postJumpStickCooldownDuration; 
         }
 
         if (isSticking)
@@ -94,6 +96,12 @@ public class ClimbWallAbility : MonoBehaviour
                 isSticking = false;
             }
         }
+
+        if (isSticking && !wasSticking && stickSoundSource != null)
+        {
+            stickSoundSource.Play();
+        }
+        wasSticking = isSticking; 
 
         if (postJumpStickCooldownTimer > 0f)
         {
@@ -195,7 +203,6 @@ public class ClimbWallAbility : MonoBehaviour
             bodyRb.AddForce(wallNormal * baseStickForce * 0.5f);
         }
     }
-
 
     private void ApplyJump(Vector2 direction, bool isVerticalJump)
     {

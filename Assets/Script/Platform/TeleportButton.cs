@@ -16,6 +16,9 @@ public class TeleportButton : MonoBehaviour
     [SerializeField] private float checkRadius;
     [SerializeField] private InputAction teleport;
 
+    [Header("Sound Settings")]
+    [SerializeField] private AudioSource activateSoundSource;
+
     private SpriteRenderer spriteRenderer;
     private float cooldownTimer = 0f;
     private bool isOnCooldown = false;
@@ -88,6 +91,10 @@ public class TeleportButton : MonoBehaviour
 
         if (teleportedAny)
         {
+            if (activateSoundSource != null)
+            {
+                activateSoundSource.Play();
+            }
             spriteRenderer.sprite = onSprite; 
             isOnCooldown = true;
             cooldownTimer = 0f;

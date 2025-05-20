@@ -17,6 +17,7 @@ public class PauseMenu : MonoBehaviour
 
     [SerializeField] private InputAction pauseAction;
     [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private AudioSource buttonSoundSource; // Reference to the external AudioSource
 
     private void Awake()
     {
@@ -52,7 +53,6 @@ public class PauseMenu : MonoBehaviour
         musicSlider.value = Mathf.Pow(10, musicVolume / 20);
         sfxSlider.value = Mathf.Pow(10, sfxVolume / 20);
 
-        // Ensure percentage is capped at 100%
         musicText.text = "Music: " + Mathf.RoundToInt(Mathf.Clamp(musicSlider.value * 100, 0, 100)) + "%";
         sfxText.text = "SFX: " + Mathf.RoundToInt(Mathf.Clamp(sfxSlider.value * 100, 0, 100)) + "%";
 
@@ -75,6 +75,10 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        if (buttonSoundSource != null)
+        {
+            buttonSoundSource.Play();
+        }
         Time.timeScale = 1f;
         root.style.display = DisplayStyle.None;
         isPaused = false;
@@ -97,6 +101,10 @@ public class PauseMenu : MonoBehaviour
 
     public void GoToMainScene()
     {
+        if (buttonSoundSource != null)
+        {
+            buttonSoundSource.Play();
+        }
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }

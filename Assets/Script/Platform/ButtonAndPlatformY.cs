@@ -15,6 +15,10 @@ public class ButtonPlatformY : MonoBehaviour
     [SerializeField] private bool shouldAutoOff = true; 
     [SerializeField] private float autoOffDelay;
 
+    [Header("Sound Settings")]
+    [SerializeField] private AudioSource buttonToggleSoundSource;
+    [SerializeField] private AudioSource moveSoundSource;
+
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D platformRigidbody;
     private bool isOn = false;
@@ -26,6 +30,7 @@ public class ButtonPlatformY : MonoBehaviour
     private float highPositionY;
     private float autoOffTimer = 0f;
     private bool playerOnPlatform = false;
+    private bool isMoving = false;
 
     void Awake()
     {
@@ -55,6 +60,10 @@ public class ButtonPlatformY : MonoBehaviour
         {
             ToggleButton();
             playerOnPlatform = true;
+            if (buttonToggleSoundSource != null)
+            {
+                buttonToggleSoundSource.Play();
+            }
         }
     }
 
@@ -106,6 +115,22 @@ public class ButtonPlatformY : MonoBehaviour
                 }
                 targetPosition = new Vector2(platform.transform.position.x, lowPositionY);
                 autoOffTimer = 0f;
+            }
+        }
+
+        bool wasMoving = isMoving;
+        isMoving = Vector2.Distance(platformRigidbody.position, targetPosition) > 0.01f;
+
+        // Play sound only when moving
+        if (moveSoundSource != null)
+        {
+            if (isMoving && !wasMoving)
+            {
+                moveSoundSource.Play();
+            }
+            else if (!isMoving && wasMoving)
+            {
+                moveSoundSource.Stop();
             }
         }
     }

@@ -9,11 +9,15 @@ public class AutoMovingPlatformY : MonoBehaviour
     [SerializeField] private bool moveUpWhenStepped = true; 
     [SerializeField] private float moveDelay; 
 
+    [Header("Sound Settings")]
+    [SerializeField] private AudioSource moveSoundSource;
+
     private Rigidbody2D platformRigidbody;
     private Vector2 targetPosition;
     private bool playerOnPlatform = false;
     private float delayTimer = 0f;
     private bool isDelayed = false;
+    private bool isMoving = false;
 
     void Awake()
     {
@@ -58,6 +62,22 @@ public class AutoMovingPlatformY : MonoBehaviour
                 {
                     targetPosition = new Vector2(transform.position.x, moveUpWhenStepped ? highPositionY : lowPositionY);
                 }
+            }
+        }
+
+        bool wasMoving = isMoving;
+        isMoving = Vector2.Distance(platformRigidbody.position, targetPosition) > 0.01f;
+
+
+        if (moveSoundSource != null)
+        {
+            if (isMoving && !wasMoving)
+            {
+                moveSoundSource.Play();
+            }
+            else if (!isMoving && wasMoving)
+            {
+                moveSoundSource.Stop();
             }
         }
     }
