@@ -13,12 +13,17 @@ public class HeadLauncher : MonoBehaviour
 
     [Header("Launch Settings")]
     [SerializeField] private float launchForce;
+
     [Header("Input")]
     [SerializeField] private InputAction Launch;
+
+    [Header("Sound Settings")]
+    [SerializeField] private AudioSource launchSoundSource;
+
     private void Awake()
     {
-
     }
+
     private void OnEnable()
     {
         Launch.Enable();
@@ -27,12 +32,10 @@ public class HeadLauncher : MonoBehaviour
 
     private void OnDisable()
     {
-
         Launch.performed -= LaunchHeadInDirection;
         Launch.Disable();
-            
-            
     }
+
     private void LaunchHeadInDirection(InputAction.CallbackContext ctx)
     {
         Debug.Log("HeadLaunched");
@@ -46,5 +49,9 @@ public class HeadLauncher : MonoBehaviour
     {
         Debug.Log("HeadLaunched");
         headRb.AddForce(launchDir.normalized * launchForce, ForceMode2D.Impulse);
+        if (launchSoundSource != null)
+        {
+            launchSoundSource.Play();
+        }
     }
 }
