@@ -1,0 +1,8 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Form.uss?fileID=7433441132597879392&amp;guid=f35f7abfd45395f4a8f652b034e05850&amp;type=3#Form" />
+    <engine:VisualElement name="Backstory" style="flex-grow: 1; margin-top: 10px; margin-left: 6px; background-image: url(&quot;project://database/Assets/Art/MainMenu/backstory.png?fileID=-5177839217513843412&amp;guid=fbae069d05682a44a97f8797547fb2db&amp;type=3#backstory_0&quot;);">
+        <engine:Label text="Story" name="Title" class="heading1" style="font-size: 120px; margin-top: 20px; background-image: none; background-size: 35% 120%;" />
+        <engine:Label text="In the dead of night, a stranger came. &#10;He slaughtered the man’s family then slicing &#10;his body into six parts: &#10;head, torso, arms, and legs&#10;burying them far apart.&#10;But death wasn’t the end.&#10;The man awoke underground, only a head, buried in &#10;silence and rage.&#10;He crawled. Through soil. Through shadows. Through memory.&#10;And when he rose again—whole, bloodied, &#10;remembered the stranger’s face.&#10;And the stranger would remember his." name="Story" style="font-size: 40px; -unity-font-definition: url(&quot;project://database/Assets/Art/joystix%20monospace.otf?fileID=12800000&amp;guid=297983744b178d94db7ea16b36808887&amp;type=3#joystix monospace&quot;); -unity-text-align: upper-center; color: rgb(255, 255, 255);" />
+        <engine:Button text="Back" name="BackButton" class="button" style="margin-top: 50px;" />
+    </engine:VisualElement>
+</engine:UXML>
